@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LivingRoom1215", "LivingRoom1215.csproj", "{5AC54A0D-86A8-5C63-1070-446E07A4030E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LivingRoom1215.Editor", "LivingRoom1215.Editor.csproj", "{1C87EBC9-A5C2-034D-44FD-958EDB5ACB97}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5AC54A0D-86A8-5C63-1070-446E07A4030E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AC54A0D-86A8-5C63-1070-446E07A4030E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AC54A0D-86A8-5C63-1070-446E07A4030E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AC54A0D-86A8-5C63-1070-446E07A4030E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C87EBC9-A5C2-034D-44FD-958EDB5ACB97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C87EBC9-A5C2-034D-44FD-958EDB5ACB97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C87EBC9-A5C2-034D-44FD-958EDB5ACB97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C87EBC9-A5C2-034D-44FD-958EDB5ACB97}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

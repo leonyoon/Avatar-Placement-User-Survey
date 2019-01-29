@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LivingRoom2017_Features - l_6 - Test 제대로", "LivingRoom2017_Features - l_6 - Test 제대로.csproj", "{831A2760-2366-057C-285F-0D5BCBAAE570}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LivingRoom2017_Features - l_6 - Test 제대로.Editor", "LivingRoom2017_Features - l_6 - Test 제대로.Editor.csproj", "{1C28C0D1-740E-0806-0C0A-AD9F6A2A75BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{831A2760-2366-057C-285F-0D5BCBAAE570}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{831A2760-2366-057C-285F-0D5BCBAAE570}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{831A2760-2366-057C-285F-0D5BCBAAE570}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{831A2760-2366-057C-285F-0D5BCBAAE570}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C28C0D1-740E-0806-0C0A-AD9F6A2A75BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C28C0D1-740E-0806-0C0A-AD9F6A2A75BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C28C0D1-740E-0806-0C0A-AD9F6A2A75BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C28C0D1-740E-0806-0C0A-AD9F6A2A75BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

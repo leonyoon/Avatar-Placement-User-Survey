@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LivingRoom2017_Features", "LivingRoom2017_Features.csproj", "{6ABE5E6F-6844-9C85-FE07-0DE5E5C1FD6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LivingRoom2017_Features.Editor", "LivingRoom2017_Features.Editor.csproj", "{C3D186FD-35D8-1377-FD0B-704AA8000DF8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6ABE5E6F-6844-9C85-FE07-0DE5E5C1FD6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ABE5E6F-6844-9C85-FE07-0DE5E5C1FD6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ABE5E6F-6844-9C85-FE07-0DE5E5C1FD6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ABE5E6F-6844-9C85-FE07-0DE5E5C1FD6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3D186FD-35D8-1377-FD0B-704AA8000DF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3D186FD-35D8-1377-FD0B-704AA8000DF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3D186FD-35D8-1377-FD0B-704AA8000DF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3D186FD-35D8-1377-FD0B-704AA8000DF8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

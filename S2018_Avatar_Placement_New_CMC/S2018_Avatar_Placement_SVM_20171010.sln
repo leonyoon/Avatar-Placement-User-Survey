@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S2018_Avatar_Placement_SVM_20171010", "S2018_Avatar_Placement_SVM_20171010.csproj", "{ACE8B378-E6A8-7BD1-BA4E-76BB943D97A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S2018_Avatar_Placement_SVM_20171010.Editor", "S2018_Avatar_Placement_SVM_20171010.Editor.csproj", "{801B7F38-99A4-C76D-D372-1747A28DD207}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ACE8B378-E6A8-7BD1-BA4E-76BB943D97A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACE8B378-E6A8-7BD1-BA4E-76BB943D97A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACE8B378-E6A8-7BD1-BA4E-76BB943D97A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACE8B378-E6A8-7BD1-BA4E-76BB943D97A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{801B7F38-99A4-C76D-D372-1747A28DD207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{801B7F38-99A4-C76D-D372-1747A28DD207}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{801B7F38-99A4-C76D-D372-1747A28DD207}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{801B7F38-99A4-C76D-D372-1747A28DD207}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
