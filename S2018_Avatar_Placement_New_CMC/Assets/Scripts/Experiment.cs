@@ -711,7 +711,7 @@ public class Experiment : MonoBehaviour, IPointerClickHandler
     void OnDrawGizmos()
     {
     }
-    void ConsistencyMeasure()
+    void ConsistencyMeasure() //For all data from 13-48, collecting consistent data based on dist/ang differences between user data
     {
         if (consistency_bool)
         {
@@ -1268,145 +1268,621 @@ public class Experiment : MonoBehaviour, IPointerClickHandler
         }
     }
     */
-    void HeatMapVis()
+    void PositiveAndRandomNegativeSamples_Deep()
     {
-        for (int y = 0; y < Map_R_height; y++)
+        if (deep_pos)
         {
-            for (int x = 0; x < Map_R_width; x++)
+            if (yyy == 37)
             {
-                if (Map_R[x, y, 0].walkable)
-                {
-                    hIndex = new SimIndex[24];
-                    for (int z = 0; z < 24; z++)
-                    {
-                        hIndex[z] = new SimIndex(x, y, z, sIndex[y * Map_R_width * numSec + x * numSec + z].simValue);
-                    }
-                    var result = hIndex.OrderBy(SimIndex => SimIndex.simValue);
-                    Vector3 pos = new Vector3(Map_R[x, y, 0].xCoord, 0f, Map_R[x, y, 0].zCoord);
-                    Vector3 end = new Vector3(pos.x + 0.2f * Mathf.Cos(Mathf.PI / 180f * (-15f * result.ElementAt(0).sIdx + 90f) % 360), 0f, pos.z + 0.2f * Mathf.Sin(Mathf.PI / 180f * (-15f * result.ElementAt(0).sIdx + 90f) % 360));
-                    Vector3 dir = new Vector3(end.x - pos.x, 0f, end.z - pos.z);
-                    heatSim = result.ElementAt(0).simValue;
+                zzz++;
+                pairDD.value = zzz;
+                yyy = 13;
+                PairChange();
+                fur_script.PairToFurnitureMap(numPair);
+            }
 
-                    if (heatSim < highestSim + SimDiff)
+            //numPair = zzz;
+            numScene = yyy;
+            numScene--;
+            TestScene(0);
+
+            //Showing all 10 data of each scene
+            if (Alldata == true && numScene > 0 && numScene < 37)
+            {
+                AllUserData();
+            }
+            //Each scene data for Pair 12 or greater
+            if (adminmode == false && numPair >= 12)
+            {
+                ViewScene();
+            }
+            RecallAvaX();
+            RecallHumY();
+            RecallHumX();
+            RecallAvaY();
+            Debug.Log(numPair + "_" + numScene + "_a");
+
+
+            string fileName = Application.dataPath + "\\Deep_feature\\Third\\feature_x_" + numPair.ToString() + ".txt";
+            FileStream fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
+            StreamWriter sw_x = new StreamWriter(fileStr);
+
+            float[] feat45d = new float[45];
+            feat45d = Feat_fromX(HumX, AvaY, 0);
+
+            for (int i = 0; i < 110; i++)
+            {
+                for (int j = 0; j < 45; j++)
+                {
+                    if (j < 44)
                     {
-                        heatSim = (heatSim - highestSim) / SimDiff;
-                        heatSim = 1 - heatSim;
-                        float p;
-                        Color heatColor;
-                        if (heatSim < 0.05f)
+                        //Debug.Log(j);
+                        sw_x.Write(feat45d[j] + "\t");
+                    }
+                    else
+                    {
+                        sw_x.Write(feat45d[j] + "\n");
+                    }
+                }
+            }
+
+            sw_x.Close();
+
+
+            fileName = Application.dataPath + "\\Deep_feature\\Third\\feature_x_pos" + numPair.ToString() + ".txt";
+            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
+            StreamWriter sw_x_pos = new StreamWriter(fileStr);
+
+            RecallAvaX_U(); //AvaX_U_1, AvaX_U_2, AvaX_U_3, AvaX_U_4....
+                            // GameObject array for 10 user selected avatar
+            AvaX_U[0] = AvaX_U_1;
+            AvaX_U[1] = AvaX_U_2;
+            AvaX_U[2] = AvaX_U_3;
+            AvaX_U[3] = AvaX_U_4;
+            AvaX_U[4] = AvaX_U_5;
+            AvaX_U[5] = AvaX_U_6;
+            AvaX_U[6] = AvaX_U_7;
+            AvaX_U[7] = AvaX_U_8;
+            AvaX_U[8] = AvaX_U_9;
+            AvaX_U[9] = AvaX_U_10;
+            for (int h = 0; h < 11; h++)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    feat45d = Feat_fromX(AvaX_U[i], HumY, 1);
+                    //Debug.Log("Count : " + h + " Pair : " + numPair + " Scene : " + numScene + " Ava " + i);
+                    for (int j = 0; j < 45; j++)
+                    {
+                        if (j < 44)
                         {
-                            p = 20f * heatSim;
-                            heatColor = new Color(0.15f - 0.15f * p, 0.15f - 0.15f * p, 0.85f * p + 0.15f);
-                        }
-                        else if (heatSim > (2.0f / 3.0f))
-                        {
-                            p = 3f * heatSim - 2f;
-                            heatColor = new Color(1.0f * p, 1.0f - p, 0f);
-                        }
-                        else if (heatSim > (1.0f / 3.0f))
-                        {
-                            p = 3f * heatSim - 1f;
-                            heatColor = new Color(p, 1.0f, 0f);
+                            sw_x_pos.Write(feat45d[j] + "\t");
                         }
                         else
                         {
-                            p = 3f * heatSim;
-                            heatColor = new Color(0, (1.0f / 0.85f) * (p - 0.15f), 1.0f - (1.0f / 0.85f) * (p - 0.15f));
+                            sw_x_pos.Write(feat45d[j] + "\n");
                         }
-                        DebugExtension.DebugArrow(pos, dir, heatColor);
                     }
+                }
+            }
+
+            sw_x_pos.Close();
+
+            //Debug.Log(numPair + "_" + numScene + "_b");
+
+            //fileName = Application.dataPath + "\\Metric\\ranksvm\\qid\\ranksvm_" + numPair.ToString() + "_" + numScene + "b.txt";
+            /*
+            fileName = Application.dataPath + "\\Metric\\ranksvm\\NoDistance134567\\ranksvm_NoDis_" + numPair.ToString() + ".txt";
+            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
+            sw = new StreamWriter(fileStr);
+
+            fileName = Application.dataPath + "\\Metric\\ranksvm\\Spatial1567\\ranksvm_Spatial_" + numPair.ToString() + ".txt";
+            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
+            sw_2 = new StreamWriter(fileStr);
+            */
+
+            fileName = Application.dataPath + "\\Deep_feature\\Third\\feature_x_neg" + numPair.ToString() + ".txt";
+            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
+            StreamWriter sw_ranneg = new StreamWriter(fileStr);
+
+            int count = 0;
+
+            while (count < 100)
+            {
+                AvaX.transform.position = new Vector3(Random.Range(Map_R[0, 0, 0].xCoord, Map_R[Map_R_width - 1, Map_R_height - 1, 0].xCoord), 0f, Random.Range(Map_R[0, 0, 0].zCoord, Map_R[Map_R_width - 1, Map_R_height - 1, 0].zCoord));
+                AvaX.transform.eulerAngles = new Vector3(AvaX.transform.eulerAngles.x, Random.Range(0f, 360f), AvaX.transform.eulerAngles.z);
+                feat7d = Dist_Feat_6d(HumX, AvaY, AvaX, HumY);
+                if (!(feat7d[0] < 0.2f && feat7d[1] < 0.1f && feat7d[2] < 0.2f && feat7d[3] < 0.7f && feat7d[4] < 0.4f && feat7d[5] < 0.7f))
+                {
+                    AvaX_N_clone[count] = Instantiate(AvaX_N_prefab, AvaX.transform.position, Quaternion.Euler(AvaX.transform.eulerAngles)) as GameObject;
+                    feat45d = Feat_fromX(AvaX, HumY, 1);
+                    for (int j = 0; j < 45; j++)
+                    {
+                        if (j < 44)
+                        {
+                            sw_ranneg.Write(feat45d[j] + "\t");
+                        }
+                        else
+                        {
+                            sw_ranneg.Write(feat45d[j] + "\n");
+                        }
+                    }
+                    count++;
+
+                }
+            }
+
+            sw_ranneg.Close();
+            if (AvaX_N_clone[0] != null)
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    Destroy(AvaX_N_clone[i]);
+
+                }
+            }
+
+            AvaX_N_clone_1 = NsampleNearUserdata(AvaX_U, HumY); // Function that generate samples
+            if (AvaX_N_clone_1[0] != null)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Destroy(AvaX_N_clone_1[i]);
+
+                }
+            }
+
+            yyy++;
+            if (zzz == 24 && yyy == 37)
+            {
+                deep_pos = false;
+            }
+
+        }
+    }
+    void PositiveAndRandomNegativeSamples_Deep_48()
+    {
+        if (PosRNeg)
+        {
+            if (yyy == 49)
+            {
+                zzz++;
+                pairDD.value = zzz;
+                yyy = 37;
+                PairChange();
+                fur_script.PairToFurnitureMap(numPair);
+            }
+
+            //numPair = zzz;
+            numScene = yyy;
+            DeactAvatars();
+            ViewScene_48();
+            Debug.Log("Pair : " + numPair + " NumScene : " + numScene);
+
+            //Showing all 10 data of each scene
+            if (Alldata == true && numScene > 0 && numScene < 49)
+            {
+                AllUserData_48();
+            }
 
 
 
-                    /*
-                    if (highestSim <= heatSim && heatSim < highestSim + heatLev)
-                    {
-                        DebugExtension.DebugArrow(pos, dir, Color.red);
-                        //Debug.DrawLine(pos, end, Color.red);
-                    }
-                    if (highestSim + heatLev <= heatSim && heatSim < highestSim + heatLev * 2f)
-                    {
-                        DebugExtension.DebugArrow(pos, dir, Color.magenta);
-                    }
-                    if (highestSim + heatLev * 2f <= heatSim && heatSim < highestSim + heatLev * 3f)
-                    {
-                        DebugExtension.DebugArrow(pos, dir, Color.yellow);
-                    }
-                    if (highestSim + heatLev * 3f <= heatSim && heatSim < highestSim + heatLev * 4f)
-                    {
-                        DebugExtension.DebugArrow(pos, dir, Color.green);
-                    }
+            RecallAvaX();
+            RecallHumY();
+            RecallHumX();
+            RecallAvaY();
+            //Debug.Log(numPair + "_" + numScene + "_a");
 
-                    if (highestSim + heatLev * 4f <= heatSim && heatSim <= highestSim + heatLev * 5f)
+
+            string fileName = Application.dataPath + "\\Deep_feature\\Third\\feature_x_" + numPair.ToString() + ".txt";
+            FileStream fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
+            StreamWriter sw_x = new StreamWriter(fileStr);
+
+            float[] feat45d = new float[45];
+            feat45d = Feat_fromX(HumX, AvaY, 0);
+
+            for (int i = 0; i < 110; i++)
+            {
+                for (int j = 0; j < 45; j++)
+                {
+                    if (j < 44)
                     {
-                        DebugExtension.DebugArrow(pos, dir, Color.blue);
+                        //Debug.Log(j);
+                        sw_x.Write(feat45d[j] + "\t");
                     }
-                    */
+                    else
+                    {
+                        sw_x.Write(feat45d[j] + "\n");
+                    }
+                }
+            }
+
+            sw_x.Close();
+
+
+            fileName = Application.dataPath + "\\Deep_feature\\Third\\feature_x_pos" + numPair.ToString() + ".txt";
+            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
+            StreamWriter sw_x_pos = new StreamWriter(fileStr);
+
+            RecallAvaX_U(); //AvaX_U_1, AvaX_U_2, AvaX_U_3, AvaX_U_4....
+                            // GameObject array for 10 user selected avatar
+            AvaX_U[0] = AvaX_U_1;
+            AvaX_U[1] = AvaX_U_2;
+            AvaX_U[2] = AvaX_U_3;
+            AvaX_U[3] = AvaX_U_4;
+            AvaX_U[4] = AvaX_U_5;
+            AvaX_U[5] = AvaX_U_6;
+            AvaX_U[6] = AvaX_U_7;
+            AvaX_U[7] = AvaX_U_8;
+            AvaX_U[8] = AvaX_U_9;
+            AvaX_U[9] = AvaX_U_10;
+            for (int h = 0; h < 11; h++)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    feat45d = Feat_fromX(AvaX_U[i], HumY, 1);
+                    //Debug.Log("Count : " + h + " Pair : " + numPair + " Scene : " + numScene + " Ava " + i);
+                    for (int j = 0; j < 45; j++)
+                    {
+                        if (j < 44)
+                        {
+                            sw_x_pos.Write(feat45d[j] + "\t");
+                        }
+                        else
+                        {
+                            sw_x_pos.Write(feat45d[j] + "\n");
+                        }
+                    }
+                }
+            }
+
+            sw_x_pos.Close();
+
+            //Debug.Log(numPair + "_" + numScene + "_b");
+
+            //fileName = Application.dataPath + "\\Metric\\ranksvm\\qid\\ranksvm_" + numPair.ToString() + "_" + numScene + "b.txt";
+            /*
+            fileName = Application.dataPath + "\\Metric\\ranksvm\\NoDistance134567\\ranksvm_NoDis_" + numPair.ToString() + ".txt";
+            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
+            sw = new StreamWriter(fileStr);
+
+            fileName = Application.dataPath + "\\Metric\\ranksvm\\Spatial1567\\ranksvm_Spatial_" + numPair.ToString() + ".txt";
+            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
+            sw_2 = new StreamWriter(fileStr);
+            */
+
+            fileName = Application.dataPath + "\\Deep_feature\\Third\\feature_x_neg" + numPair.ToString() + ".txt";
+            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
+            StreamWriter sw_ranneg = new StreamWriter(fileStr);
+
+            int count = 0;
+
+            while (count < 100)
+            {
+                AvaX.transform.position = new Vector3(Random.Range(Map_R[0, 0, 0].xCoord, Map_R[Map_R_width - 1, Map_R_height - 1, 0].xCoord), 0f, Random.Range(Map_R[0, 0, 0].zCoord, Map_R[Map_R_width - 1, Map_R_height - 1, 0].zCoord));
+                AvaX.transform.eulerAngles = new Vector3(AvaX.transform.eulerAngles.x, Random.Range(0f, 360f), AvaX.transform.eulerAngles.z);
+                feat7d = Dist_Feat_6d(HumX, AvaY, AvaX, HumY);
+                if (!(feat7d[0] < 0.2f && feat7d[1] < 0.1f && feat7d[2] < 0.2f && feat7d[3] < 0.7f && feat7d[4] < 0.4f && feat7d[5] < 0.7f))
+                {
+                    AvaX_N_clone[count] = Instantiate(AvaX_N_prefab, AvaX.transform.position, Quaternion.Euler(AvaX.transform.eulerAngles)) as GameObject;
+                    feat45d = Feat_fromX(AvaX, HumY, 1);
+                    for (int j = 0; j < 45; j++)
+                    {
+                        if (j < 44)
+                        {
+                            sw_ranneg.Write(feat45d[j] + "\t");
+                        }
+                        else
+                        {
+                            sw_ranneg.Write(feat45d[j] + "\n");
+                        }
+                    }
+                    count++;
+
+                }
+            }
+
+            sw_ranneg.Close();
+            if (AvaX_N_clone[0] != null)
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    Destroy(AvaX_N_clone[i]);
+
+                }
+            }
+
+            AvaX_N_clone_1 = NsampleNearUserdata(AvaX_U, HumY); // Function that generate samples
+            if (AvaX_N_clone_1[0] != null)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Destroy(AvaX_N_clone_1[i]);
+
+                }
+            }
+
+            yyy++;
+            if (zzz == 24 && yyy == 49)
+            {
+                PosRNeg = false;
+            }
+
+        }
+    }
+    float[] Feat_fromX(GameObject FromX, GameObject ToY, int HumOrAva)
+    {
+
+
+        fromXfeat = FeatureValues(FromX, ToY, fromXfeat);
+
+        //Pose Affordance
+        //Feat41[0]-Feat41[16]
+        feat_fromX[0] = fromXfeat[0] / 1000f;
+        for (int i = 0; i < 16; i++)
+        {
+            if (i == 0)
+            {
+                feat_fromX[i + 1] = (0.25f * fromXfeat[16] + 0.5f * fromXfeat[i + 1] + 0.25f * fromXfeat[i + 2]) / 1000f;
+            }
+
+            feat_fromX[i + 1] = (0.25f * fromXfeat[i] + 0.5f * fromXfeat[i + 1] + 0.25f * fromXfeat[i + 2]) / 1000f;
+
+            if (i == 15)
+
+            {
+                feat_fromX[i + 1] = (0.25f * fromXfeat[i] + 0.5f * fromXfeat[i + 1] + 0.25f * fromXfeat[1]) / 1000f;
+            }
+        }
+
+        //Distance from X to Y
+        //Feat41[17]
+        feat_fromX[17] = fromXfeat[17] / 10f;
+
+        //Angle between X front and X to Y
+        //Feat41[18]
+        feat_fromX[18] = Mathf.Min(fromXfeat[18], (360f - fromXfeat[18])) / 180f;
+        feat_fromX[19] = Mathf.Min(fromXfeat[19], (360f - fromXfeat[19])) / 180f;
+        //Object category frequency nexr X and X'
+        //Feat41[19]-Feat41[30]
+        float[] object_category_frequency = new float[12];
+        if (HumOrAva == 0)
+        {
+            object_category_frequency = fur_script.Object_category_frequency_HumX(FromX);
+        }
+        else
+        {
+            object_category_frequency = fur_script.Object_category_frequency_AvaX(FromX);
+        }
+
+        for (int i = 0; i < 12; i++)
+        {
+            feat_fromX[i + 20] = object_category_frequency[i];
+        }
+
+        //Visual attention of X as category frequency
+        //Feat41[31]-Feat41[42]
+        float[] visual_attention_category_frequency = new float[12];
+        if (HumOrAva == 0)
+        {
+            visual_attention_category_frequency = fur_script.VisualAttention_Hum(FromX);
+
+        }
+        else
+        {
+            visual_attention_category_frequency = fur_script.VisualAttention_Ava(FromX);
+        }
+
+        for (int i = 0; i < 12; i++)
+        {
+            feat_fromX[i + 32] = visual_attention_category_frequency[i];
+        }
+
+
+        //SitOrStand
+        //Feat41[43]
+        feat_fromX[44] = SitOrStandofX(FromX);
+
+
+        //skipfornow
+        //Dist_feat[5] = fur_script.Free_space_diff(HumX, AvaX);
+
+
+        return feat_fromX;
+    }
+    float[] FeatureValues(GameObject FromX, GameObject ToY, float[] basicFeat)
+    {
+        //Debug.Log("FromX : " + FromX);
+        //Debug.Log("ToY : " + ToY);
+
+        //float[]  basicFeat = new float[20];
+
+
+        EulerAngleY = FromX.transform.eulerAngles.y;
+
+        //////////1.Social feature
+        tempVec3 = new Vector3(FromX.transform.position.x - ToY.transform.position.x, 0f, FromX.transform.position.z - ToY.transform.position.z);
+        distToY = Vector3.Magnitude(tempVec3);
+
+        basicFeat[17] = distToY;
+
+        angleXwrtY = ContAngle(FromX.transform.forward, ToY.transform.position - FromX.transform.position);
+        /*
+        if(angleXwrtY>180)
+        {
+            angleXwrtY = 360 - angleXwrtY;
+        }
+        */
+
+        //Debug.Log("Angle between the forward direction of X and the position of Y : " + angleXwrtY);
+        basicFeat[18] = angleXwrtY;
+
+        angleYwrtX = ContAngle(ToY.transform.forward, FromX.transform.position - ToY.transform.position);
+
+        /*
+        if (angleYwrtX > 180)
+        {
+            angleYwrtX = 360 - angleYwrtX;
+        }
+        */
+        //Debug.Log("Angle between the forward direction of X and the position of Y : " + angleXwrtY);
+        basicFeat[19] = angleYwrtX;
+
+
+
+        //////////2.Affordance
+        RaycastHit hit;
+
+        //Debug.Log("Circular height field----------------------------------------------------------------");
+        for (int l = 0; l < 2; l++)
+        {
+            if (l == 0)
+            {
+                totHeight = 0.0f;
+                for (int m = 0; m < numSampling / 10f; m++)
+                {
+                    randsqrt = Mathf.Sqrt(Random.Range(0.0f, 1.0f));
+                    ray_start.Set(FromX.transform.position.x + 0.25f * (l + randsqrt) * Mathf.Cos(Mathf.PI / 180f * Random.Range(0, 360f)), 2.25f, FromX.transform.position.z + 0.25f * (l + randsqrt) * Mathf.Sin(Mathf.PI / 180f * Random.Range(0, 360f)));
+                    if (Physics.Raycast(ray_start, ray_dir_down, out hit, 2f))
+                    {
+                        totHeight = totHeight + hit.point.y;
+                        //Debug.DrawLine(ray_start, hit.point, Color.blue);
+                    }
+                }
+                basicFeat[0] = totHeight * 10f;
+                //Debug.Log ("Feat[" + 0 + "] : " + Feat [0]);
+            }
+            else
+            {
+                for (int k = 1; k < 17; k++)
+                {
+                    totHeight = 0.0f;
+                    for (int m = 0; m < numSampling / 10f; m++)
+                    {
+                        randsqrt = Mathf.Sqrt(Random.Range(0.0f, 1.0f));
+                        ray_start.Set(FromX.transform.position.x + 0.25f * (l + randsqrt) * Mathf.Cos(Mathf.PI / 180f * Random.Range((22.5F * k - EulerAngleY + 90f) % 360f, (22.5F * (k + 1) - EulerAngleY + 90f) % 360f)), 2.25f, FromX.transform.position.z + 0.25f * (l + randsqrt) * Mathf.Sin(Mathf.PI / 180f * Random.Range((22.5F * k - EulerAngleY + 90f) % 360f, (22.5F * (k + 1) - EulerAngleY + 90f) % 360f)));
+                        if (Physics.Raycast(ray_start, ray_dir_down, out hit, 2f))
+                        {
+                            totHeight = totHeight + hit.point.y;
+                            //Debug.DrawLine(ray_start, hit.point, Color.blue);
+                        }
+                    }
+                    //totHeight = totHeight / numSampling  ;
+                    //Debug.Log("numSec: "+ k +" level: " + l + " Height: " +	  totHeight);
+                    //circCount =  k + numSec * l;
+                    basicFeat[k] = totHeight * 10f;
+                    //Debug.Log ("Feat[" + k + "] : " + Feat [k]);
                 }
             }
         }
-    }
-    void TxtToMat()
-    {
-        string tempFileName;
-        string line;
-        string[] numbers;
-        tempFileName = Application.dataPath + "\\SVsFromMatlab\\MLR_w2.txt";
-        sr = new StreamReader(@tempFileName);
-        Mat_Lab = new float[45, 45];
 
-        line = sr.ReadLine();
-        numbers = line.Split(' ');
-        for (int i = 0; i < 45; i++)
+
+
+
+
+
+
+        //Debug.Log("Feat[25]" + Feat[25]);
+
+
+        /*
+        //////////3.Space feature
+        //Debug.Log("AvatarX Space feature count "+count);
+        for (int l = 0; l < 1; l++) // l<L_space
         {
-            for (int j = 0; j < 45; j++)
+            for (int k = 0; k < 3; k++) // k < numSec
             {
-                Mat_Lab[i,j] = float.Parse(numbers[j+45*(i)]);
-                //Debug.Log(Mat_Lab[i, j]);
+                float bin1, bin2, bin3, bin4, bin5, bin6, bin7;
+                totHeight = 0.0f;
+                bin1 = 0; bin2 = 0; bin3 = 0; bin4 = 0; bin5 = 0; bin6 = 0; bin7 = 0;
+                for (int m = 0; m < numSampling; m++)
+                {
+                    randsqrt = Mathf.Sqrt(Random.Range(0.0f, 1.0f));
+                    ray_start.Set(FromX.transform.position.x + 0.50f * (l + randsqrt) * Mathf.Cos(Mathf.PI / 180f * Random.Range((15.0F * k - EulerAngleY + 90f) % 360f, (15.0F * (k+1) - EulerAngleY + 90f) % 360f)), 2.25f, FromX.transform.position.z + 0.50f * (l + randsqrt) * Mathf.Sin(Mathf.PI / 180f * Random.Range((15.0F * k - EulerAngleY + 90f) % 360f, (15.0F * (k+1) - EulerAngleY + 90f) % 360f)));
+                    if (Physics.Raycast(ray_start, ray_dir_down, out hit, 2f))
+                    {
+                        if (hit.point.y <= 0.5f)
+                        {
+                            bin2 = bin2 + 1;
+                        }
+                        if (hit.point.y > 0.5f && hit.point.y <= 1.0f)
+                        {
+                            bin3 = bin3 + 1;
+                        }
+                        if (hit.point.y > 1.0f && hit.point.y <= 1.5f)
+                        {
+                            bin4 = bin4 + 1;
+                        }
+                        if (hit.point.y > 1.5f && hit.point.y <= 2.0f)
+                        {
+                            bin5 = bin5 + 1;
+                        }
+                        if (hit.point.y > 2.0f && hit.point.y <= 2.5f)
+                        {
+                            bin6 = bin6 + 1;
+                        }
+                        if (hit.point.y > 2.5f && hit.point.y <= 3.0f)
+                        {
+                            bin7 = bin7 + 1;
+                        }
+                    }
+                    else
+                    {
+                        bin1 = bin1 + 1;
+                    }
+                }
+                // 2(soc) + 24(Aff) + 4(level) * 24(sector) * 7(bin) 
+                Feat[l * numSec * numBin + k * numBin + 0] = bin1 / numSampling;
+                Feat[l * numSec * numBin + k * numBin + 1] = bin2 / numSampling;
+                Feat[l * numSec * numBin + k * numBin + 2] = bin3 / numSampling;
+                Feat[l * numSec * numBin + k * numBin + 3] = bin4 / numSampling;
+                Feat[l * numSec * numBin + k * numBin + 4] = bin5 / numSampling;
+                Feat[l * numSec * numBin + k * numBin + 5] = bin6 / numSampling;
+                Feat[l * numSec * numBin + k * numBin + 6] = bin7 / numSampling;
+
+                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 0) + "][level : " + l + ", sector : " +  k + "].bin1 : " + Feat[l * numSec * numBin + k * numBin + 0]);
+                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 1) + "][level : " + l + ", sector : " +  k + "].bin2 : " + Feat[l * numSec * numBin + k * numBin + 1]);
+                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 2) + "][level : " + l + ", sector : " + k + "].bin3 : " + Feat[l * numSec * numBin + k * numBin + 2]);
+                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 3) + "][level : " + l + ", sector : " + k + "].bin4 : " + Feat[l * numSec * numBin + k * numBin + 3]);
+                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 4) + "][level : " + l + ", sector : " + k + "].bin5 : " + Feat[l * numSec * numBin + k * numBin + 4]);
+                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 5) + "][level : " + l + ", sector : " + k + "].bin6 : " + Feat[l * numSec * numBin + k * numBin + 5]);
+                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 6) + "][level : " + l + ", sector : " + k + "].bin7 : " + Feat[l * numSec * numBin + k * numBin + 6]);
+                Debug.Log("-------------------");
+
             }
         }
-    }
-    float[,] Mat_multiplication(float[,] Mat_A, float[,] Mat_B)
-    {
-        float[,] Mat_C = new float[Mat_A.GetLength(0), Mat_B.GetLength(1)];
+        */
+        //Debug.Log("----------------------------------------------------------------------------------------------------------------------------");
+        /*////////////4. Isovist
+        Debug.Log("Isovist----------------------------------------------------------------");
+        int isoCount = socFeatureSize + affordFeatureSize + spatialFeatureSize;
+        for (int k = 1; k < 14; k++) {
 
-       for (int i = 0; i < Mat_A.GetLength(0); i++)
-       {
-            for (int j = 0; j < Mat_B.GetLength(1); j++)
-            {
-               Mat_C[i, j] = 0;
-
-               for (int k = 0; k < 2; k++)
-               {
-                    Mat_C[i, j] += Mat_A[i, k] * Mat_B[k, j];
-               }
-
+            ray_start.Set (FromX.transform.position.x, 0.5f, FromX.transform.position.z);
+            ray_iso.Set (Mathf.Cos (Mathf.PI / 180f * ((15.0F * (k - 1)-EulerAngleY)%360)), 0, Mathf.Sin (Mathf.PI / 180f * ((15.0F * (k - 1)-EulerAngleY)%360)));
+          
+            //Debug.Log(isoCount);
+            //Debug.Log(k);
+            if (Physics.Raycast (ray_start, ray_iso, out hit, 4f)) {
+                Debug.DrawLine (ray_start, hit.point, Color.cyan);
+                float Dist_Isovist = Vector3.Distance (ray_start, hit.point);
+                //Dist_Isovist = Dist_Isovist / 5f / 13f;
+                //Debug.Log ("Isovist(" + k + ") : " + Dist_Isovist);
+                Feat [isoCount] = Dist_Isovist;
+                //Debug.Log ("[" + isoCount + "] : " + Feat [isoCount]);
+            } 
+            else { 
+                float iso_nothit = 4f;
+                //Debug.Log("Isovist(" + k + ") : " + iso_nothit);
+                Feat [isoCount] = iso_nothit;
+                //Debug.Log ("[" + isoCount + "] : " + Feat [isoCount]);
             }
-
-       }
-       return Mat_C;
-    }
-    float MKML_distance(float[] humanX, float[] avatarX, float[,] Mat_W)
-    {
-        float distance = 0f;
-        float[,] feature_difference = new float[1,45];
-        for(int i =0; i<45; i++)
-        {
-            feature_difference[0,i] = humanX[i] - avatarX[i];
+            isoCount = isoCount + 1;
         }
+        */
+        return basicFeat;
 
-        float[,] Mat_temp = Mat_multiplication(feature_difference, Mat_W);
-        float[,] feature_difference_T = new float[45, 1];
-        for (int i = 0; i < 45; i++)
-        {
-            feature_difference_T[i, 0] = humanX[i] - avatarX[i];
-        }
-        float[,] Mat_result = Mat_multiplication(Mat_temp, feature_difference_T);
-
-        distance = Mat_result[0, 0];
-
-        return distance;
     }
+
     void PlacementByAlgorithm()
     {
 
@@ -1754,6 +2230,490 @@ public class Experiment : MonoBehaviour, IPointerClickHandler
 
         }
     }
+    void CMC_OldData()
+    {
+        if (cmc_old)
+        {
+            if (yyy == 37)
+            {
+                zzz++;
+                pairDD.value = zzz;
+                yyy = 13;
+                PairChange();
+                fur_script.PairToFurnitureMap(numPair);
+            }
+            //numPair = zzz;
+            numScene = yyy;
+            numScene--;
+            TestScene(0);
+
+            //Showing all 10 data of each scene
+            if (Alldata == true && numScene > 0 && numScene < 37)
+            {
+                AllUserData();
+            }
+            //Each scene data for Pair 12 or greater
+            if (adminmode == false && numPair >= 12)
+            {
+                ViewScene();
+            }
+            RecallAvaX();
+            RecallHumY();
+            RecallHumX();
+            RecallAvaY();
+            Debug.Log(numPair + "_" + numScene + "_a");
+
+            sIndex = new SimIndex[Map_R_height * Map_R_width * numSec + 10];
+            //Debug.Log("Initial value" + (Map_R_height * Map_R_width * numSec + 10));
+            float[] data = null;
+            float[] sample_input = new float[90];
+            pxw = 0;
+            pyh = 0;
+            pzs = 0;
+            timestamp = 0f;
+            feat_count = 0;
+            lowestSim = 0f;
+            int ccount = 0;
+            for (int pxw = 0; pxw < Map_R_width; pxw++)
+            {
+                for (int pyh = 0; pyh < Map_R_height; pyh++)
+                {
+                    for (int pzs = 0; pzs < numSec; pzs++)
+                    {
+                        //Debug.Log("Count : " + ccount);
+                        ccount++;
+                        if (Map_R[pxw, pyh, 0].walkable == true && pyh % 2 == 0 && pxw % 2 == 0 && pzs % 3 == 0)
+                        {
+                            //Debug.Log("Height : " + pyh + " Width : " + pxw + " Sector : " + pzs);
+                            Vector3 pos = new Vector3(Map_R[pxw, pyh, pzs].xCoord, 0f, Map_R[pxw, pyh, pzs].zCoord);
+                            AvaX.transform.position = pos;
+                            Vector3 eulerY = new Vector3(0f, pzs * 15f, 0f);
+                            AvaX.transform.eulerAngles = eulerY;
+                            feat_count++;
+                            float sum = 0f;
+
+                            float[] humanX = new float[45];
+                            float[] avatarX = new float[45];
+                            HumX45 = Feat_fromX(HumX, AvaY, 0);
+                            for (int m = 0; m < 45; m++)
+                            {
+                                sample_input[m] = HumX45[m];
+                                humanX[m] = HumX45[m];
+                                //Debug.Log("HumX" + (m + 1) + " : " + sample_input[m]);
+                            }
+                            AvaX45 = Feat_fromX(AvaX, HumY, 1);
+                            for (int m = 0; m < 45; m++)
+                            {
+                                sample_input[45 + m] = AvaX45[m];
+                                avatarX[m] = AvaX45[m];
+                                //Debug.Log("AvaX" + (m + 1) + " : " + sample_input[m + 45]);
+                            }
+                            data = telp_script.clientSocketHandler.getData(FRAME_BUFFER_SIZE, sample_input);
+                            float temp = data[0];
+                            sum = temp;
+                            sIndex[pyh * Map_R_width * numSec + pxw * numSec + pzs] = new SimIndex(pxw, pyh, pzs, sum);
+                            if (sum > lowestSim)
+                            {
+                                lowestSim = sum;
+                            }
+                        }
+                        else
+                        {
+                            sIndex[pyh * Map_R_width * numSec + pxw * numSec + pzs] = new SimIndex(pxw, pyh, pzs, 1000000000000F);
+                        }
+
+                    }
+                }
+            }
+            Debug.Log("Feat_count : " + feat_count);
+
+
+            ////////////////////// Avatar_B
+            for (int i = 0; i < 10; i++)
+            {
+                sIndex[Map_R_height * Map_R_width * numSec + i] = new SimIndex(Map_R_width - 1, Map_R_height - 1, numSec, 1000000000000F);
+                //Debug.Log("Count : " + (Map_R_height * Map_R_width * numSec + i));
+            }
+            var result = sIndex.OrderBy(SimIndex => SimIndex.simValue);
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Actual placement
+            int topX = result.ElementAt(0).wIdx;
+            int topZ = result.ElementAt(0).hIdx;
+            int topS = result.ElementAt(0).sIdx;
+            //Debug.Log("Rank1 : " + result.ElementAt(0).simValue);
+            //highestSim = 0f; //
+            highestSim = result.ElementAt(0).simValue;
+            AvaX_1R.SetActive(true);
+
+            Vector3 XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
+            AvaX_1R.transform.position = XTpos;
+            Vector3 XTeulerY = new Vector3(0f, topS * 15f, 0f);
+            AvaX_1R.transform.eulerAngles = XTeulerY;
+
+            topX = result.ElementAt(1).wIdx;
+            topZ = result.ElementAt(1).hIdx;
+            topS = result.ElementAt(1).sIdx;
+            //Debug.Log("Rank2 : " + result.ElementAt(1).simValue);
+            AvaX_2O.SetActive(true);
+
+            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
+            AvaX_2O.transform.position = XTpos;
+            XTeulerY = new Vector3(0f, topS * 15f, 0f);
+            AvaX_2O.transform.eulerAngles = XTeulerY;
+
+
+            topX = result.ElementAt(2).wIdx;
+            topZ = result.ElementAt(2).hIdx;
+            topS = result.ElementAt(2).sIdx;
+            //Debug.Log("Rank3 : " + result.ElementAt(2).simValue);
+            AvaX_3Y.SetActive(true);
+
+            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
+            AvaX_3Y.transform.position = XTpos;
+            XTeulerY = new Vector3(0f, topS * 15f, 0f);
+            AvaX_3Y.transform.eulerAngles = XTeulerY;
+
+
+            topX = result.ElementAt(3).wIdx;
+            topZ = result.ElementAt(3).hIdx;
+            topS = result.ElementAt(3).sIdx;
+            //Debug.Log("Rank4 : " + result.ElementAt(3).simValue);
+
+            AvaX_4G.SetActive(true);
+
+            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
+            AvaX_4G.transform.position = XTpos;
+            XTeulerY = new Vector3(0f, topS * 15f, 0f);
+            AvaX_4G.transform.eulerAngles = XTeulerY;
+
+
+            topX = result.ElementAt(4).wIdx;
+            topZ = result.ElementAt(4).hIdx;
+            topS = result.ElementAt(4).sIdx;
+            //Debug.Log("Rank5 : " + result.ElementAt(4).simValue);
+            Debug.Log("-----------------------------------");
+            AvaX_5B.SetActive(true);
+
+            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
+            AvaX_5B.transform.position = XTpos;
+            XTeulerY = new Vector3(0f, topS * 15f, 0f);
+            AvaX_5B.transform.eulerAngles = XTeulerY;
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Debug.Log("Rank_by_sort(start) Hour : " + System.DateTime.Now.Hour + " Minute: " + System.DateTime.Now.Minute + " Second: " + System.DateTime.Now.Second + " Millisecond: " + System.DateTime.Now.Millisecond);
+            RecallAvaX_U(); //AvaX_U_1, AvaX_U_2, AvaX_U_3, AvaX_U_4....
+            AvaX_U[0] = AvaX_U_1;
+            AvaX_U[1] = AvaX_U_2;
+            AvaX_U[2] = AvaX_U_3;
+            AvaX_U[3] = AvaX_U_4;
+            AvaX_U[4] = AvaX_U_5;
+            AvaX_U[5] = AvaX_U_6;
+            AvaX_U[6] = AvaX_U_7;
+            AvaX_U[7] = AvaX_U_8;
+            AvaX_U[8] = AvaX_U_9;
+            AvaX_U[9] = AvaX_U_10;
+            //float[] data = null;
+            //float[] sample_input = new float[90];
+
+            HumX45 = Feat_fromX(HumX, AvaY, 0);
+            for (int m = 0; m < 45; m++)
+            {
+                sample_input[m] = HumX45[m];
+                //humanX[m] = HumX45[m];
+            }
+            float[] temp_avaU = new float[10];
+            for (int i = 0; i < 10; i++)
+            {
+                AvaX45 = Feat_fromX(AvaX_U[i], HumY, 1);
+                for (int m = 0; m < 45; m++)
+                {
+                    sample_input[45 + m] = AvaX45[m];
+                    //avatarX[m] = AvaX45[m];
+                }
+                data = telp_script.clientSocketHandler.getData(FRAME_BUFFER_SIZE, sample_input);
+                temp_avaU[i] = data[0];
+                //Debug.Log("Ava_U" + (i + 1) + ": " + data[0]);
+                sIndex[pyh * Map_R_width * numSec + pxw * numSec + pzs + i] = new SimIndex(pxw, pyh, pzs, data[0]);
+            }
+
+            //var rank = sIndex.OrderBy(SimIndex => SimIndex.simValue).Select
+            var rank = sIndex.Select((x, i) => new { OldIndex = i, Value = x.simValue, NewIndex = -1 })
+                                  .OrderBy(x => x.Value).Select((x, i) => new { OldIndex = x.OldIndex, Value = x.Value, NewIndex = i + 1 })
+                                  .OrderBy(x => x.OldIndex);
+
+
+            for (int i = 0; i < 10; i++)
+            {
+
+                int rank100 = rank.ElementAt(pyh * Map_R_width * numSec + pxw * numSec + pzs + i).NewIndex;
+                Debug.Log("Ava_U" + (i + 1) + ": " + rank100 + " (" + Mathf.FloorToInt((float)rank100 / ((float)feat_count + 10f) * 100f) + ")");
+                rank100_cmc[Mathf.FloorToInt((float)rank100 / ((float)feat_count + 10f) * 100f)]++;
+
+            }
+            //lowestSim = 1f;
+            SimDiff = Mathf.Abs(lowestSim - highestSim);
+            heatLev = SimDiff / 5f;
+            Debug.Log(rank100_cmc[0] + " " + rank100_cmc[1] + " " + rank100_cmc[2] + " " + rank100_cmc[3] + " " + rank100_cmc[4] + " " + rank100_cmc[5] + " " + rank100_cmc[6] + " " + rank100_cmc[7] + " " + rank100_cmc[8] + " " + rank100_cmc[9]);
+            Debug.Log("Placement--------------------END ");
+
+            yyy++;
+            if (zzz == 24 && yyy == 37)
+            {
+                cmc_old = false;
+
+                string fileName = Application.dataPath + "\\ranking_measure\\rank100_cont_triple_24.txt";
+                fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
+                StreamWriter sw_rank = new StreamWriter(fileStr);
+
+
+                for (int l = 0; l < 100; l++)
+                {
+                    sw_rank.Write(rank100_cmc[l] + " ");
+                }
+                sw_rank.Close();
+                Debug.Log("Rank_CMC (end) Hour : " + System.DateTime.Now.Hour + " Minute: " + System.DateTime.Now.Minute + " Second: " + System.DateTime.Now.Second + " Millisecond: " + System.DateTime.Now.Millisecond);
+            }
+        }
+    }
+    void CMC_NewData()
+    {
+        if (cmc_new)
+        {
+            if (yyy == 49)
+            {
+                zzz++;
+                pairDD.value = zzz;
+                yyy = 37;
+                PairChange();
+                fur_script.PairToFurnitureMap(numPair);
+            }
+            //numPair = zzz;
+            numScene = yyy;
+            DeactAvatars();
+            ViewScene_48();
+
+            //Showing all 10 data of each scene
+            if (Alldata == true && numScene > 0 && numScene < 49)
+            {
+                AllUserData_48();
+            }
+            RecallAvaX();
+            RecallHumY();
+            RecallHumX();
+            RecallAvaY();
+            Debug.Log(numPair + "_" + numScene + "_a");
+
+            sIndex = new SimIndex[Map_R_height * Map_R_width * numSec + 10];
+            //Debug.Log("Initial value" + (Map_R_height * Map_R_width * numSec + 10));
+            float[] data = null;
+            float[] sample_input = new float[90];
+            pxw = 0;
+            pyh = 0;
+            pzs = 0;
+            timestamp = 0f;
+            feat_count = 0;
+            lowestSim = 0f;
+            int ccount = 0;
+            for (int pxw = 0; pxw < Map_R_width; pxw++)
+            {
+                for (int pyh = 0; pyh < Map_R_height; pyh++)
+                {
+                    for (int pzs = 0; pzs < numSec; pzs++)
+                    {
+                        //Debug.Log("Count : " + ccount);
+                        ccount++;
+                        if (Map_R[pxw, pyh, 0].walkable == true && pyh % 2 == 0 && pxw % 2 == 0 && pzs % 3 == 0)
+                        {
+                            //Debug.Log("Height : " + pyh + " Width : " + pxw + " Sector : " + pzs);
+                            Vector3 pos = new Vector3(Map_R[pxw, pyh, pzs].xCoord, 0f, Map_R[pxw, pyh, pzs].zCoord);
+                            AvaX.transform.position = pos;
+                            Vector3 eulerY = new Vector3(0f, pzs * 15f, 0f);
+                            AvaX.transform.eulerAngles = eulerY;
+                            feat_count++;
+                            float sum = 0f;
+
+                            float[] humanX = new float[45];
+                            float[] avatarX = new float[45];
+                            HumX45 = Feat_fromX(HumX, AvaY, 0);
+                            for (int m = 0; m < 45; m++)
+                            {
+                                sample_input[m] = HumX45[m];
+                                humanX[m] = HumX45[m];
+                                //Debug.Log("HumX" + (m + 1) + " : " + sample_input[m]);
+                            }
+                            AvaX45 = Feat_fromX(AvaX, HumY, 1);
+                            for (int m = 0; m < 45; m++)
+                            {
+                                sample_input[45 + m] = AvaX45[m];
+                                avatarX[m] = AvaX45[m];
+                                //Debug.Log("AvaX" + (m + 1) + " : " + sample_input[m + 45]);
+                            }
+                            data = telp_script.clientSocketHandler.getData(FRAME_BUFFER_SIZE, sample_input);
+                            float temp = data[0];
+                            sum = temp;
+                            sIndex[pyh * Map_R_width * numSec + pxw * numSec + pzs] = new SimIndex(pxw, pyh, pzs, sum);
+                            if (sum > lowestSim)
+                            {
+                                lowestSim = sum;
+                            }
+                        }
+                        else
+                        {
+                            sIndex[pyh * Map_R_width * numSec + pxw * numSec + pzs] = new SimIndex(pxw, pyh, pzs, 1000000000000F);
+                        }
+
+                    }
+                }
+            }
+            Debug.Log("Feat_count : " + feat_count);
+
+
+            ////////////////////// Avatar_B
+            for (int i = 0; i < 10; i++)
+            {
+                sIndex[Map_R_height * Map_R_width * numSec + i] = new SimIndex(Map_R_width - 1, Map_R_height - 1, numSec, 1000000000000F);
+                //Debug.Log("Count : " + (Map_R_height * Map_R_width * numSec + i));
+            }
+            var result = sIndex.OrderBy(SimIndex => SimIndex.simValue);
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Actual placement
+            int topX = result.ElementAt(0).wIdx;
+            int topZ = result.ElementAt(0).hIdx;
+            int topS = result.ElementAt(0).sIdx;
+            //Debug.Log("Rank1 : " + result.ElementAt(0).simValue);
+            //highestSim = 0f; //
+            highestSim = result.ElementAt(0).simValue;
+            AvaX_1R.SetActive(true);
+
+            Vector3 XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
+            AvaX_1R.transform.position = XTpos;
+            Vector3 XTeulerY = new Vector3(0f, topS * 15f, 0f);
+            AvaX_1R.transform.eulerAngles = XTeulerY;
+
+            topX = result.ElementAt(1).wIdx;
+            topZ = result.ElementAt(1).hIdx;
+            topS = result.ElementAt(1).sIdx;
+            //Debug.Log("Rank2 : " + result.ElementAt(1).simValue);
+            AvaX_2O.SetActive(true);
+
+            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
+            AvaX_2O.transform.position = XTpos;
+            XTeulerY = new Vector3(0f, topS * 15f, 0f);
+            AvaX_2O.transform.eulerAngles = XTeulerY;
+
+
+            topX = result.ElementAt(2).wIdx;
+            topZ = result.ElementAt(2).hIdx;
+            topS = result.ElementAt(2).sIdx;
+            //Debug.Log("Rank3 : " + result.ElementAt(2).simValue);
+            AvaX_3Y.SetActive(true);
+
+            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
+            AvaX_3Y.transform.position = XTpos;
+            XTeulerY = new Vector3(0f, topS * 15f, 0f);
+            AvaX_3Y.transform.eulerAngles = XTeulerY;
+
+
+            topX = result.ElementAt(3).wIdx;
+            topZ = result.ElementAt(3).hIdx;
+            topS = result.ElementAt(3).sIdx;
+            //Debug.Log("Rank4 : " + result.ElementAt(3).simValue);
+
+            AvaX_4G.SetActive(true);
+
+            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
+            AvaX_4G.transform.position = XTpos;
+            XTeulerY = new Vector3(0f, topS * 15f, 0f);
+            AvaX_4G.transform.eulerAngles = XTeulerY;
+
+
+            topX = result.ElementAt(4).wIdx;
+            topZ = result.ElementAt(4).hIdx;
+            topS = result.ElementAt(4).sIdx;
+            //Debug.Log("Rank5 : " + result.ElementAt(4).simValue);
+            Debug.Log("-----------------------------------");
+            AvaX_5B.SetActive(true);
+
+            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
+            AvaX_5B.transform.position = XTpos;
+            XTeulerY = new Vector3(0f, topS * 15f, 0f);
+            AvaX_5B.transform.eulerAngles = XTeulerY;
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Debug.Log("Rank_by_sort(start) Hour : " + System.DateTime.Now.Hour + " Minute: " + System.DateTime.Now.Minute + " Second: " + System.DateTime.Now.Second + " Millisecond: " + System.DateTime.Now.Millisecond);
+            RecallAvaX_U(); //AvaX_U_1, AvaX_U_2, AvaX_U_3, AvaX_U_4....
+            AvaX_U[0] = AvaX_U_1;
+            AvaX_U[1] = AvaX_U_2;
+            AvaX_U[2] = AvaX_U_3;
+            AvaX_U[3] = AvaX_U_4;
+            AvaX_U[4] = AvaX_U_5;
+            AvaX_U[5] = AvaX_U_6;
+            AvaX_U[6] = AvaX_U_7;
+            AvaX_U[7] = AvaX_U_8;
+            AvaX_U[8] = AvaX_U_9;
+            AvaX_U[9] = AvaX_U_10;
+            //float[] data = null;
+            //float[] sample_input = new float[90];
+
+            HumX45 = Feat_fromX(HumX, AvaY, 0);
+            for (int m = 0; m < 45; m++)
+            {
+                sample_input[m] = HumX45[m];
+                //humanX[m] = HumX45[m];
+            }
+            float[] temp_avaU = new float[10];
+            for (int i = 0; i < 10; i++)
+            {
+                AvaX45 = Feat_fromX(AvaX_U[i], HumY, 1);
+                for (int m = 0; m < 45; m++)
+                {
+                    sample_input[45 + m] = AvaX45[m];
+                    //avatarX[m] = AvaX45[m];
+                }
+                data = telp_script.clientSocketHandler.getData(FRAME_BUFFER_SIZE, sample_input);
+                temp_avaU[i] = data[0];
+                //Debug.Log("Ava_U" + (i + 1) + ": " + data[0]);
+                sIndex[pyh * Map_R_width * numSec + pxw * numSec + pzs + i] = new SimIndex(pxw, pyh, pzs, data[0]);
+            }
+
+            //var rank = sIndex.OrderBy(SimIndex => SimIndex.simValue).Select
+            var rank = sIndex.Select((x, i) => new { OldIndex = i, Value = x.simValue, NewIndex = -1 })
+                                  .OrderBy(x => x.Value).Select((x, i) => new { OldIndex = x.OldIndex, Value = x.Value, NewIndex = i + 1 })
+                                  .OrderBy(x => x.OldIndex);
+
+
+            for (int i = 0; i < 10; i++)
+            {
+
+                int rank100 = rank.ElementAt(pyh * Map_R_width * numSec + pxw * numSec + pzs + i).NewIndex;
+                Debug.Log("Ava_U" + (i + 1) + ": " + rank100 + " (" + Mathf.FloorToInt((float)rank100 / (float)feat_count * 100f) + ")");
+                rank100_cmc[Mathf.FloorToInt((float)rank100 / ((float)feat_count + 10f) * 100f)]++;
+            }
+            //lowestSim = 1f;
+            SimDiff = Mathf.Abs(lowestSim - highestSim);
+            heatLev = SimDiff / 5f;
+            Debug.Log(rank100_cmc[0] + " " + rank100_cmc[1] + " " + rank100_cmc[2] + " " + rank100_cmc[3] + " " + rank100_cmc[4] + " " + rank100_cmc[5] + " " + rank100_cmc[6] + " " + rank100_cmc[7] + " " + rank100_cmc[8] + " " + rank100_cmc[9]);
+            Debug.Log("Placement--------------------END ");
+
+            yyy++;
+            if (zzz == 24 && yyy == 49)
+            {
+                cmc_new = false;
+
+                string fileName = Application.dataPath + "\\ranking_measure\\rank100_cont_triple_36.txt";
+                fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
+                StreamWriter sw_rank = new StreamWriter(fileStr);
+
+
+                for (int l = 0; l < 100; l++)
+                {
+                    sw_rank.Write(rank100_cmc[l] + " ");
+                }
+                sw_rank.Close();
+                Debug.Log("Rank_CMC (end) Hour : " + System.DateTime.Now.Hour + " Minute: " + System.DateTime.Now.Minute + " Second: " + System.DateTime.Now.Second + " Millisecond: " + System.DateTime.Now.Millisecond);
+            }
+        }
+    }
     void AllCloseNegativeSamples()
     {
         if (comSample)
@@ -2090,831 +3050,6 @@ public class Experiment : MonoBehaviour, IPointerClickHandler
                 please = false;
             }
  
-        }
-    }
-    void CMC_OldData()
-    {
-        if (cmc_old)
-        {
-            if (yyy == 37)
-            {
-                zzz++;
-                pairDD.value = zzz;
-                yyy = 13;
-                PairChange();
-                fur_script.PairToFurnitureMap(numPair);
-            }
-            //numPair = zzz;
-            numScene = yyy;
-            numScene--;
-            TestScene(0);
-
-            //Showing all 10 data of each scene
-            if (Alldata == true && numScene > 0 && numScene < 37)
-            {
-                AllUserData();
-            }
-            //Each scene data for Pair 12 or greater
-            if (adminmode == false && numPair >= 12)
-            {
-                ViewScene();
-            }
-            RecallAvaX();
-            RecallHumY();
-            RecallHumX();
-            RecallAvaY();
-            Debug.Log(numPair + "_" + numScene + "_a");
-
-            sIndex = new SimIndex[Map_R_height * Map_R_width * numSec + 10];
-            //Debug.Log("Initial value" + (Map_R_height * Map_R_width * numSec + 10));
-            float[] data = null;
-            float[] sample_input = new float[90];
-            pxw = 0;
-            pyh = 0;
-            pzs = 0;
-            timestamp = 0f;
-            feat_count = 0;
-            lowestSim = 0f;
-            int ccount = 0;
-            for(int pxw =0; pxw< Map_R_width;pxw++)
-            {
-                for (int pyh = 0; pyh < Map_R_height; pyh++)
-                {
-                    for (int pzs = 0; pzs < numSec; pzs++)
-                    {
-                        //Debug.Log("Count : " + ccount);
-                        ccount++;
-                        if (Map_R[pxw, pyh, 0].walkable == true && pyh % 2 == 0 && pxw % 2 == 0 && pzs % 3 == 0)
-                        {
-                            //Debug.Log("Height : " + pyh + " Width : " + pxw + " Sector : " + pzs);
-                            Vector3 pos = new Vector3(Map_R[pxw, pyh, pzs].xCoord, 0f, Map_R[pxw, pyh, pzs].zCoord);
-                            AvaX.transform.position = pos;
-                            Vector3 eulerY = new Vector3(0f, pzs * 15f, 0f);
-                            AvaX.transform.eulerAngles = eulerY;
-                            feat_count++;
-                            float sum = 0f;
-
-                            float[] humanX = new float[45];
-                            float[] avatarX = new float[45];
-                            HumX45 = Feat_fromX(HumX, AvaY, 0);
-                            for (int m = 0; m < 45; m++)
-                            {
-                                sample_input[m] = HumX45[m];
-                                humanX[m] = HumX45[m];
-                                //Debug.Log("HumX" + (m + 1) + " : " + sample_input[m]);
-                            }
-                            AvaX45 = Feat_fromX(AvaX, HumY, 1);
-                            for (int m = 0; m < 45; m++)
-                            {
-                                sample_input[45 + m] = AvaX45[m];
-                                avatarX[m] = AvaX45[m];
-                                //Debug.Log("AvaX" + (m + 1) + " : " + sample_input[m + 45]);
-                            }
-                            data = telp_script.clientSocketHandler.getData(FRAME_BUFFER_SIZE, sample_input);
-                            float temp = data[0];
-                            sum = temp;
-                            sIndex[pyh * Map_R_width * numSec + pxw * numSec + pzs] = new SimIndex(pxw, pyh, pzs, sum);
-                            if (sum > lowestSim)
-                            {
-                                lowestSim = sum;
-                            }
-                        }
-                        else
-                        {
-                            sIndex[pyh * Map_R_width * numSec + pxw * numSec + pzs] = new SimIndex(pxw, pyh, pzs, 1000000000000F);
-                        }
-                        
-                    }
-                }
-            }
-            Debug.Log("Feat_count : " + feat_count);
-
-
-            ////////////////////// Avatar_B
-            for (int i = 0; i < 10; i++)
-            {
-                sIndex[Map_R_height * Map_R_width * numSec + i] = new SimIndex(Map_R_width-1, Map_R_height-1, numSec, 1000000000000F);
-                //Debug.Log("Count : " + (Map_R_height * Map_R_width * numSec + i));
-            }
-            var result = sIndex.OrderBy(SimIndex => SimIndex.simValue);
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //Actual placement
-            int topX = result.ElementAt(0).wIdx;
-            int topZ = result.ElementAt(0).hIdx;
-            int topS = result.ElementAt(0).sIdx;
-            //Debug.Log("Rank1 : " + result.ElementAt(0).simValue);
-            //highestSim = 0f; //
-            highestSim = result.ElementAt(0).simValue;
-            AvaX_1R.SetActive(true);
-
-            Vector3 XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
-            AvaX_1R.transform.position = XTpos;
-            Vector3 XTeulerY = new Vector3(0f, topS * 15f, 0f);
-            AvaX_1R.transform.eulerAngles = XTeulerY;
-
-            topX = result.ElementAt(1).wIdx;
-            topZ = result.ElementAt(1).hIdx;
-            topS = result.ElementAt(1).sIdx;
-            //Debug.Log("Rank2 : " + result.ElementAt(1).simValue);
-            AvaX_2O.SetActive(true);
-
-            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
-            AvaX_2O.transform.position = XTpos;
-            XTeulerY = new Vector3(0f, topS * 15f, 0f);
-            AvaX_2O.transform.eulerAngles = XTeulerY;
-
-
-            topX = result.ElementAt(2).wIdx;
-            topZ = result.ElementAt(2).hIdx;
-            topS = result.ElementAt(2).sIdx;
-            //Debug.Log("Rank3 : " + result.ElementAt(2).simValue);
-            AvaX_3Y.SetActive(true);
-
-            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
-            AvaX_3Y.transform.position = XTpos;
-            XTeulerY = new Vector3(0f, topS * 15f, 0f);
-            AvaX_3Y.transform.eulerAngles = XTeulerY;
-
-
-            topX = result.ElementAt(3).wIdx;
-            topZ = result.ElementAt(3).hIdx;
-            topS = result.ElementAt(3).sIdx;
-            //Debug.Log("Rank4 : " + result.ElementAt(3).simValue);
-
-            AvaX_4G.SetActive(true);
-
-            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
-            AvaX_4G.transform.position = XTpos;
-            XTeulerY = new Vector3(0f, topS * 15f, 0f);
-            AvaX_4G.transform.eulerAngles = XTeulerY;
-
-
-            topX = result.ElementAt(4).wIdx;
-            topZ = result.ElementAt(4).hIdx;
-            topS = result.ElementAt(4).sIdx;
-            //Debug.Log("Rank5 : " + result.ElementAt(4).simValue);
-            Debug.Log("-----------------------------------");
-            AvaX_5B.SetActive(true);
-
-            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
-            AvaX_5B.transform.position = XTpos;
-            XTeulerY = new Vector3(0f, topS * 15f, 0f);
-            AvaX_5B.transform.eulerAngles = XTeulerY;
-
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //Debug.Log("Rank_by_sort(start) Hour : " + System.DateTime.Now.Hour + " Minute: " + System.DateTime.Now.Minute + " Second: " + System.DateTime.Now.Second + " Millisecond: " + System.DateTime.Now.Millisecond);
-            RecallAvaX_U(); //AvaX_U_1, AvaX_U_2, AvaX_U_3, AvaX_U_4....
-            AvaX_U[0] = AvaX_U_1;
-            AvaX_U[1] = AvaX_U_2;
-            AvaX_U[2] = AvaX_U_3;
-            AvaX_U[3] = AvaX_U_4;
-            AvaX_U[4] = AvaX_U_5;
-            AvaX_U[5] = AvaX_U_6;
-            AvaX_U[6] = AvaX_U_7;
-            AvaX_U[7] = AvaX_U_8;
-            AvaX_U[8] = AvaX_U_9;
-            AvaX_U[9] = AvaX_U_10;
-            //float[] data = null;
-            //float[] sample_input = new float[90];
-
-            HumX45 = Feat_fromX(HumX, AvaY, 0);
-            for (int m = 0; m < 45; m++)
-            {
-                sample_input[m] = HumX45[m];
-                //humanX[m] = HumX45[m];
-            }
-            float[] temp_avaU = new float[10];
-            for (int i = 0; i < 10; i++)
-            {
-                AvaX45 = Feat_fromX(AvaX_U[i], HumY, 1);
-                for (int m = 0; m < 45; m++)
-                {
-                    sample_input[45 + m] = AvaX45[m];
-                    //avatarX[m] = AvaX45[m];
-                }
-                data = telp_script.clientSocketHandler.getData(FRAME_BUFFER_SIZE, sample_input);
-                temp_avaU[i] = data[0];
-                //Debug.Log("Ava_U" + (i + 1) + ": " + data[0]);
-                sIndex[pyh * Map_R_width * numSec + pxw * numSec + pzs + i] = new SimIndex(pxw, pyh, pzs, data[0]);
-            }
-
-            //var rank = sIndex.OrderBy(SimIndex => SimIndex.simValue).Select
-            var rank = sIndex.Select((x, i) => new { OldIndex = i, Value = x.simValue, NewIndex = -1 })
-                                  .OrderBy(x => x.Value).Select((x, i) => new { OldIndex = x.OldIndex, Value = x.Value, NewIndex = i + 1 })
-                                  .OrderBy(x => x.OldIndex);
-
-
-            for (int i = 0; i < 10; i++)
-            {
-                
-                int rank100 = rank.ElementAt(pyh * Map_R_width * numSec + pxw * numSec + pzs + i).NewIndex;
-                Debug.Log("Ava_U" + (i + 1) + ": " + rank100 + " (" + Mathf.FloorToInt((float)rank100 / ((float)feat_count + 10f) * 100f) + ")");
-                rank100_cmc[Mathf.FloorToInt((float)rank100 / ((float)feat_count + 10f) * 100f)]++;
-
-            }
-            //lowestSim = 1f;
-            SimDiff = Mathf.Abs(lowestSim - highestSim);
-            heatLev = SimDiff / 5f;
-            Debug.Log(rank100_cmc[0] + " " + rank100_cmc[1] + " " + rank100_cmc[2] + " " + rank100_cmc[3] + " " + rank100_cmc[4] + " " + rank100_cmc[5] + " " + rank100_cmc[6] + " " + rank100_cmc[7] + " " + rank100_cmc[8] + " " + rank100_cmc[9]);
-            Debug.Log("Placement--------------------END ");
-
-            yyy++;
-            if (zzz == 24 && yyy == 37)
-            {
-                cmc_old = false;
-
-                string fileName = Application.dataPath + "\\ranking_measure\\rank100_cont_triple_24.txt";
-                fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
-                StreamWriter sw_rank = new StreamWriter(fileStr);
-
-
-                for (int l = 0; l < 100; l++)
-                {
-                    sw_rank.Write(rank100_cmc[l]+ " ");
-                }
-                sw_rank.Close();
-                Debug.Log("Rank_CMC (end) Hour : " + System.DateTime.Now.Hour + " Minute: " + System.DateTime.Now.Minute + " Second: " + System.DateTime.Now.Second + " Millisecond: " + System.DateTime.Now.Millisecond);
-            }
-        }
-    }
-    void CMC_NewData()
-    {
-        if (cmc_new)
-        {
-            if (yyy == 49)
-            {
-                zzz++;
-                pairDD.value = zzz;
-                yyy = 37;
-                PairChange();
-                fur_script.PairToFurnitureMap(numPair);
-            }
-            //numPair = zzz;
-            numScene = yyy;
-            DeactAvatars();
-            ViewScene_48();
-
-            //Showing all 10 data of each scene
-            if (Alldata == true && numScene > 0 && numScene < 49)
-            {
-                AllUserData_48();
-            }
-            RecallAvaX();
-            RecallHumY();
-            RecallHumX();
-            RecallAvaY();
-            Debug.Log(numPair + "_" + numScene + "_a");
-
-            sIndex = new SimIndex[Map_R_height * Map_R_width * numSec + 10];
-            //Debug.Log("Initial value" + (Map_R_height * Map_R_width * numSec + 10));
-            float[] data = null;
-            float[] sample_input = new float[90];
-            pxw = 0;
-            pyh = 0;
-            pzs = 0;
-            timestamp = 0f;
-            feat_count = 0;
-            lowestSim = 0f;
-            int ccount = 0;
-            for (int pxw = 0; pxw < Map_R_width; pxw++)
-            {
-                for (int pyh = 0; pyh < Map_R_height; pyh++)
-                {
-                    for (int pzs = 0; pzs < numSec; pzs++)
-                    {
-                        //Debug.Log("Count : " + ccount);
-                        ccount++;
-                        if (Map_R[pxw, pyh, 0].walkable == true && pyh % 2 == 0 && pxw % 2 == 0 && pzs % 3 == 0)
-                        {
-                            //Debug.Log("Height : " + pyh + " Width : " + pxw + " Sector : " + pzs);
-                            Vector3 pos = new Vector3(Map_R[pxw, pyh, pzs].xCoord, 0f, Map_R[pxw, pyh, pzs].zCoord);
-                            AvaX.transform.position = pos;
-                            Vector3 eulerY = new Vector3(0f, pzs * 15f, 0f);
-                            AvaX.transform.eulerAngles = eulerY;
-                            feat_count++;
-                            float sum = 0f;
-
-                            float[] humanX = new float[45];
-                            float[] avatarX = new float[45];
-                            HumX45 = Feat_fromX(HumX, AvaY, 0);
-                            for (int m = 0; m < 45; m++)
-                            {
-                                sample_input[m] = HumX45[m];
-                                humanX[m] = HumX45[m];
-                                //Debug.Log("HumX" + (m + 1) + " : " + sample_input[m]);
-                            }
-                            AvaX45 = Feat_fromX(AvaX, HumY, 1);
-                            for (int m = 0; m < 45; m++)
-                            {
-                                sample_input[45 + m] = AvaX45[m];
-                                avatarX[m] = AvaX45[m];
-                                //Debug.Log("AvaX" + (m + 1) + " : " + sample_input[m + 45]);
-                            }
-                            data = telp_script.clientSocketHandler.getData(FRAME_BUFFER_SIZE, sample_input);
-                            float temp = data[0];
-                            sum = temp;
-                            sIndex[pyh * Map_R_width * numSec + pxw * numSec + pzs] = new SimIndex(pxw, pyh, pzs, sum);
-                            if (sum > lowestSim)
-                            {
-                                lowestSim = sum;
-                            }
-                        }
-                        else
-                        {
-                            sIndex[pyh * Map_R_width * numSec + pxw * numSec + pzs] = new SimIndex(pxw, pyh, pzs, 1000000000000F);
-                        }
-
-                    }
-                }
-            }
-            Debug.Log("Feat_count : " + feat_count);
-
-
-            ////////////////////// Avatar_B
-            for (int i = 0; i < 10; i++)
-            {
-                sIndex[Map_R_height * Map_R_width * numSec + i] = new SimIndex(Map_R_width - 1, Map_R_height - 1, numSec, 1000000000000F);
-                //Debug.Log("Count : " + (Map_R_height * Map_R_width * numSec + i));
-            }
-            var result = sIndex.OrderBy(SimIndex => SimIndex.simValue);
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //Actual placement
-            int topX = result.ElementAt(0).wIdx;
-            int topZ = result.ElementAt(0).hIdx;
-            int topS = result.ElementAt(0).sIdx;
-            //Debug.Log("Rank1 : " + result.ElementAt(0).simValue);
-            //highestSim = 0f; //
-            highestSim = result.ElementAt(0).simValue;
-            AvaX_1R.SetActive(true);
-
-            Vector3 XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
-            AvaX_1R.transform.position = XTpos;
-            Vector3 XTeulerY = new Vector3(0f, topS * 15f, 0f);
-            AvaX_1R.transform.eulerAngles = XTeulerY;
-
-            topX = result.ElementAt(1).wIdx;
-            topZ = result.ElementAt(1).hIdx;
-            topS = result.ElementAt(1).sIdx;
-            //Debug.Log("Rank2 : " + result.ElementAt(1).simValue);
-            AvaX_2O.SetActive(true);
-
-            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
-            AvaX_2O.transform.position = XTpos;
-            XTeulerY = new Vector3(0f, topS * 15f, 0f);
-            AvaX_2O.transform.eulerAngles = XTeulerY;
-
-
-            topX = result.ElementAt(2).wIdx;
-            topZ = result.ElementAt(2).hIdx;
-            topS = result.ElementAt(2).sIdx;
-            //Debug.Log("Rank3 : " + result.ElementAt(2).simValue);
-            AvaX_3Y.SetActive(true);
-
-            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
-            AvaX_3Y.transform.position = XTpos;
-            XTeulerY = new Vector3(0f, topS * 15f, 0f);
-            AvaX_3Y.transform.eulerAngles = XTeulerY;
-
-
-            topX = result.ElementAt(3).wIdx;
-            topZ = result.ElementAt(3).hIdx;
-            topS = result.ElementAt(3).sIdx;
-            //Debug.Log("Rank4 : " + result.ElementAt(3).simValue);
-
-            AvaX_4G.SetActive(true);
-
-            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
-            AvaX_4G.transform.position = XTpos;
-            XTeulerY = new Vector3(0f, topS * 15f, 0f);
-            AvaX_4G.transform.eulerAngles = XTeulerY;
-
-
-            topX = result.ElementAt(4).wIdx;
-            topZ = result.ElementAt(4).hIdx;
-            topS = result.ElementAt(4).sIdx;
-            //Debug.Log("Rank5 : " + result.ElementAt(4).simValue);
-            Debug.Log("-----------------------------------");
-            AvaX_5B.SetActive(true);
-
-            XTpos = new Vector3(Map_R[topX, topZ, topS].xCoord, 0f, Map_R[topX, topZ, topS].zCoord);
-            AvaX_5B.transform.position = XTpos;
-            XTeulerY = new Vector3(0f, topS * 15f, 0f);
-            AvaX_5B.transform.eulerAngles = XTeulerY;
-
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //Debug.Log("Rank_by_sort(start) Hour : " + System.DateTime.Now.Hour + " Minute: " + System.DateTime.Now.Minute + " Second: " + System.DateTime.Now.Second + " Millisecond: " + System.DateTime.Now.Millisecond);
-            RecallAvaX_U(); //AvaX_U_1, AvaX_U_2, AvaX_U_3, AvaX_U_4....
-            AvaX_U[0] = AvaX_U_1;
-            AvaX_U[1] = AvaX_U_2;
-            AvaX_U[2] = AvaX_U_3;
-            AvaX_U[3] = AvaX_U_4;
-            AvaX_U[4] = AvaX_U_5;
-            AvaX_U[5] = AvaX_U_6;
-            AvaX_U[6] = AvaX_U_7;
-            AvaX_U[7] = AvaX_U_8;
-            AvaX_U[8] = AvaX_U_9;
-            AvaX_U[9] = AvaX_U_10;
-            //float[] data = null;
-            //float[] sample_input = new float[90];
-
-            HumX45 = Feat_fromX(HumX, AvaY, 0);
-            for (int m = 0; m < 45; m++)
-            {
-                sample_input[m] = HumX45[m];
-                //humanX[m] = HumX45[m];
-            }
-            float[] temp_avaU = new float[10];
-            for (int i = 0; i < 10; i++)
-            {
-                AvaX45 = Feat_fromX(AvaX_U[i], HumY, 1);
-                for (int m = 0; m < 45; m++)
-                {
-                    sample_input[45 + m] = AvaX45[m];
-                    //avatarX[m] = AvaX45[m];
-                }
-                data = telp_script.clientSocketHandler.getData(FRAME_BUFFER_SIZE, sample_input);
-                temp_avaU[i] = data[0];
-                //Debug.Log("Ava_U" + (i + 1) + ": " + data[0]);
-                sIndex[pyh * Map_R_width * numSec + pxw * numSec + pzs + i] = new SimIndex(pxw, pyh, pzs, data[0]);
-            }
-
-            //var rank = sIndex.OrderBy(SimIndex => SimIndex.simValue).Select
-            var rank = sIndex.Select((x, i) => new { OldIndex = i, Value = x.simValue, NewIndex = -1 })
-                                  .OrderBy(x => x.Value).Select((x, i) => new { OldIndex = x.OldIndex, Value = x.Value, NewIndex = i + 1 })
-                                  .OrderBy(x => x.OldIndex);
-
-
-            for (int i = 0; i < 10; i++)
-            {
-
-                int rank100 = rank.ElementAt(pyh * Map_R_width * numSec + pxw * numSec + pzs + i).NewIndex;
-                Debug.Log("Ava_U" + (i + 1) + ": " + rank100 + " (" + Mathf.FloorToInt((float)rank100 / (float)feat_count * 100f) + ")");
-                rank100_cmc[Mathf.FloorToInt((float)rank100 / ((float)feat_count+10f) * 100f)]++;
-            }
-            //lowestSim = 1f;
-            SimDiff = Mathf.Abs(lowestSim - highestSim);
-            heatLev = SimDiff / 5f;
-            Debug.Log(rank100_cmc[0] + " " + rank100_cmc[1] + " " + rank100_cmc[2] + " " + rank100_cmc[3] + " " + rank100_cmc[4] + " " + rank100_cmc[5] + " " + rank100_cmc[6] + " " + rank100_cmc[7] + " " + rank100_cmc[8] + " " + rank100_cmc[9]);
-            Debug.Log("Placement--------------------END ");
-
-            yyy++;
-            if (zzz == 24 && yyy == 49)
-            {
-                cmc_new = false;
-
-                string fileName = Application.dataPath + "\\ranking_measure\\rank100_cont_triple_36.txt";
-                fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
-                StreamWriter sw_rank = new StreamWriter(fileStr);
-
-
-                for (int l = 0; l < 100; l++)
-                {
-                    sw_rank.Write(rank100_cmc[l] + " ");
-                }
-                sw_rank.Close();
-                Debug.Log("Rank_CMC (end) Hour : " + System.DateTime.Now.Hour + " Minute: " + System.DateTime.Now.Minute + " Second: " + System.DateTime.Now.Second + " Millisecond: " + System.DateTime.Now.Millisecond);
-            }
-        }
-    }
-    void PositiveAndRandomNegativeSamples_Deep()
-    {
-        if (deep_pos)
-        {
-            if (yyy == 37)
-            {
-                zzz++;
-                pairDD.value = zzz;
-                yyy = 13;
-                PairChange();
-                fur_script.PairToFurnitureMap(numPair);
-            }
-
-            //numPair = zzz;
-            numScene = yyy;
-            numScene--;
-            TestScene(0);
-
-            //Showing all 10 data of each scene
-            if (Alldata == true && numScene > 0 && numScene < 37)
-            {
-                AllUserData();
-            }
-            //Each scene data for Pair 12 or greater
-            if (adminmode == false && numPair >= 12)
-            {
-                ViewScene();
-            }
-            RecallAvaX();
-            RecallHumY();
-            RecallHumX();
-            RecallAvaY();
-            Debug.Log(numPair + "_" + numScene + "_a");
-
-            
-            string fileName = Application.dataPath + "\\Deep_feature\\Third\\feature_x_" + numPair.ToString() + ".txt";
-            FileStream fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
-            StreamWriter sw_x = new StreamWriter(fileStr);
-
-            float[] feat45d = new float[45];
-            feat45d = Feat_fromX(HumX, AvaY, 0);
-
-            for (int i = 0; i < 110; i++)
-            { 
-                for (int j = 0; j < 45; j++)
-                {
-                    if (j < 44)
-                    {
-                        //Debug.Log(j);
-                        sw_x.Write(feat45d[j] + "\t");
-                    }
-                    else
-                    {
-                        sw_x.Write(feat45d[j] + "\n");
-                    }
-                }
-            }
-
-            sw_x.Close();
-            
-            
-            fileName = Application.dataPath + "\\Deep_feature\\Third\\feature_x_pos" + numPair.ToString() + ".txt";
-            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
-            StreamWriter sw_x_pos = new StreamWriter(fileStr);
-
-            RecallAvaX_U(); //AvaX_U_1, AvaX_U_2, AvaX_U_3, AvaX_U_4....
-                            // GameObject array for 10 user selected avatar
-            AvaX_U[0] = AvaX_U_1;
-            AvaX_U[1] = AvaX_U_2;
-            AvaX_U[2] = AvaX_U_3;
-            AvaX_U[3] = AvaX_U_4;
-            AvaX_U[4] = AvaX_U_5;
-            AvaX_U[5] = AvaX_U_6;
-            AvaX_U[6] = AvaX_U_7;
-            AvaX_U[7] = AvaX_U_8;
-            AvaX_U[8] = AvaX_U_9;
-            AvaX_U[9] = AvaX_U_10;
-            for(int h=0; h<11; h++)
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    feat45d = Feat_fromX(AvaX_U[i], HumY, 1);
-                    //Debug.Log("Count : " + h + " Pair : " + numPair + " Scene : " + numScene + " Ava " + i);
-                    for (int j = 0; j < 45; j++)
-                    {
-                        if (j < 44)
-                        {
-                            sw_x_pos.Write(feat45d[j] + "\t");
-                        }
-                        else
-                        {
-                            sw_x_pos.Write(feat45d[j] + "\n");
-                        }
-                    }
-                }
-            }
-
-            sw_x_pos.Close();
-            
-            //Debug.Log(numPair + "_" + numScene + "_b");
-
-            //fileName = Application.dataPath + "\\Metric\\ranksvm\\qid\\ranksvm_" + numPair.ToString() + "_" + numScene + "b.txt";
-            /*
-            fileName = Application.dataPath + "\\Metric\\ranksvm\\NoDistance134567\\ranksvm_NoDis_" + numPair.ToString() + ".txt";
-            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
-            sw = new StreamWriter(fileStr);
-
-            fileName = Application.dataPath + "\\Metric\\ranksvm\\Spatial1567\\ranksvm_Spatial_" + numPair.ToString() + ".txt";
-            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
-            sw_2 = new StreamWriter(fileStr);
-            */
-            
-            fileName = Application.dataPath + "\\Deep_feature\\Third\\feature_x_neg" + numPair.ToString() + ".txt";
-            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
-            StreamWriter sw_ranneg = new StreamWriter(fileStr);
-
-            int count = 0;
-
-            while (count < 100)
-            {
-                AvaX.transform.position = new Vector3(Random.Range(Map_R[0, 0, 0].xCoord, Map_R[Map_R_width - 1, Map_R_height - 1, 0].xCoord), 0f, Random.Range(Map_R[0, 0, 0].zCoord, Map_R[Map_R_width - 1, Map_R_height - 1, 0].zCoord));
-                AvaX.transform.eulerAngles = new Vector3(AvaX.transform.eulerAngles.x, Random.Range(0f, 360f), AvaX.transform.eulerAngles.z);
-                feat7d = Dist_Feat_6d(HumX, AvaY, AvaX, HumY);
-                if (!(feat7d[0] < 0.2f && feat7d[1] < 0.1f && feat7d[2] < 0.2f && feat7d[3] < 0.7f && feat7d[4] < 0.4f && feat7d[5] < 0.7f))
-                {
-                    AvaX_N_clone[count] = Instantiate(AvaX_N_prefab, AvaX.transform.position, Quaternion.Euler(AvaX.transform.eulerAngles)) as GameObject;
-                    feat45d = Feat_fromX(AvaX, HumY, 1);
-                    for (int j = 0; j < 45; j++)
-                    {
-                        if (j < 44)
-                        {
-                            sw_ranneg.Write(feat45d[j] + "\t");
-                        }
-                        else
-                        {
-                            sw_ranneg.Write(feat45d[j] + "\n");
-                        }
-                    }
-                    count++;
-
-                }
-            }
-
-            sw_ranneg.Close();
-            if (AvaX_N_clone[0] != null)
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    Destroy(AvaX_N_clone[i]);
-
-                }
-            }
- 
-            AvaX_N_clone_1 = NsampleNearUserdata(AvaX_U, HumY); // Function that generate samples
-            if (AvaX_N_clone_1[0] != null)
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    Destroy(AvaX_N_clone_1[i]);
-
-                }
-            }
-
-            yyy++;
-            if (zzz == 24 && yyy == 37)
-            {
-                deep_pos = false;
-            }
-
-        }
-    }
-    void PositiveAndRandomNegativeSamples_Deep_48()
-    {
-        if (PosRNeg)
-        {
-            if (yyy == 49)
-            {
-                zzz++;
-                pairDD.value = zzz;
-                yyy = 37;
-                PairChange();
-                fur_script.PairToFurnitureMap(numPair);
-            }
-
-            //numPair = zzz;
-            numScene = yyy;
-            DeactAvatars();
-            ViewScene_48();
-            Debug.Log("Pair : " + numPair + " NumScene : " + numScene);
-
-            //Showing all 10 data of each scene
-            if (Alldata == true && numScene > 0 && numScene < 49)
-            {
-                AllUserData_48();
-            }
-       
-
-
-            RecallAvaX();
-            RecallHumY();
-            RecallHumX();
-            RecallAvaY();
-            //Debug.Log(numPair + "_" + numScene + "_a");
-
-
-            string fileName = Application.dataPath + "\\Deep_feature\\Third\\feature_x_" + numPair.ToString() + ".txt";
-            FileStream fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
-            StreamWriter sw_x = new StreamWriter(fileStr);
-
-            float[] feat45d = new float[45];
-            feat45d = Feat_fromX(HumX, AvaY, 0);
-
-            for (int i = 0; i < 110; i++)
-            {
-                for (int j = 0; j < 45; j++)
-                {
-                    if (j < 44)
-                    {
-                        //Debug.Log(j);
-                        sw_x.Write(feat45d[j] + "\t");
-                    }
-                    else
-                    {
-                        sw_x.Write(feat45d[j] + "\n");
-                    }
-                }
-            }
-
-            sw_x.Close();
-
-
-            fileName = Application.dataPath + "\\Deep_feature\\Third\\feature_x_pos" + numPair.ToString() + ".txt";
-            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
-            StreamWriter sw_x_pos = new StreamWriter(fileStr);
-
-            RecallAvaX_U(); //AvaX_U_1, AvaX_U_2, AvaX_U_3, AvaX_U_4....
-                            // GameObject array for 10 user selected avatar
-            AvaX_U[0] = AvaX_U_1;
-            AvaX_U[1] = AvaX_U_2;
-            AvaX_U[2] = AvaX_U_3;
-            AvaX_U[3] = AvaX_U_4;
-            AvaX_U[4] = AvaX_U_5;
-            AvaX_U[5] = AvaX_U_6;
-            AvaX_U[6] = AvaX_U_7;
-            AvaX_U[7] = AvaX_U_8;
-            AvaX_U[8] = AvaX_U_9;
-            AvaX_U[9] = AvaX_U_10;
-            for (int h = 0; h < 11; h++)
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    feat45d = Feat_fromX(AvaX_U[i], HumY, 1);
-                    //Debug.Log("Count : " + h + " Pair : " + numPair + " Scene : " + numScene + " Ava " + i);
-                    for (int j = 0; j < 45; j++)
-                    {
-                        if (j < 44)
-                        {
-                            sw_x_pos.Write(feat45d[j] + "\t");
-                        }
-                        else
-                        {
-                            sw_x_pos.Write(feat45d[j] + "\n");
-                        }
-                    }
-                }
-            }
-
-            sw_x_pos.Close();
-
-            //Debug.Log(numPair + "_" + numScene + "_b");
-
-            //fileName = Application.dataPath + "\\Metric\\ranksvm\\qid\\ranksvm_" + numPair.ToString() + "_" + numScene + "b.txt";
-            /*
-            fileName = Application.dataPath + "\\Metric\\ranksvm\\NoDistance134567\\ranksvm_NoDis_" + numPair.ToString() + ".txt";
-            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
-            sw = new StreamWriter(fileStr);
-
-            fileName = Application.dataPath + "\\Metric\\ranksvm\\Spatial1567\\ranksvm_Spatial_" + numPair.ToString() + ".txt";
-            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
-            sw_2 = new StreamWriter(fileStr);
-            */
-
-            fileName = Application.dataPath + "\\Deep_feature\\Third\\feature_x_neg" + numPair.ToString() + ".txt";
-            fileStr = new FileStream(@fileName, FileMode.Append, FileAccess.Write);
-            StreamWriter sw_ranneg = new StreamWriter(fileStr);
-
-            int count = 0;
-
-            while (count < 100)
-            {
-                AvaX.transform.position = new Vector3(Random.Range(Map_R[0, 0, 0].xCoord, Map_R[Map_R_width - 1, Map_R_height - 1, 0].xCoord), 0f, Random.Range(Map_R[0, 0, 0].zCoord, Map_R[Map_R_width - 1, Map_R_height - 1, 0].zCoord));
-                AvaX.transform.eulerAngles = new Vector3(AvaX.transform.eulerAngles.x, Random.Range(0f, 360f), AvaX.transform.eulerAngles.z);
-                feat7d = Dist_Feat_6d(HumX, AvaY, AvaX, HumY);
-                if (!(feat7d[0] < 0.2f && feat7d[1] < 0.1f && feat7d[2] < 0.2f && feat7d[3] < 0.7f && feat7d[4] < 0.4f && feat7d[5] < 0.7f))
-                {
-                    AvaX_N_clone[count] = Instantiate(AvaX_N_prefab, AvaX.transform.position, Quaternion.Euler(AvaX.transform.eulerAngles)) as GameObject;
-                    feat45d = Feat_fromX(AvaX, HumY, 1);
-                    for (int j = 0; j < 45; j++)
-                    {
-                        if (j < 44)
-                        {
-                            sw_ranneg.Write(feat45d[j] + "\t");
-                        }
-                        else
-                        {
-                            sw_ranneg.Write(feat45d[j] + "\n");
-                        }
-                    }
-                    count++;
-
-                }
-            }
-
-            sw_ranneg.Close();
-            if (AvaX_N_clone[0] != null)
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    Destroy(AvaX_N_clone[i]);
-
-                }
-            }
-
-            AvaX_N_clone_1 = NsampleNearUserdata(AvaX_U, HumY); // Function that generate samples
-            if (AvaX_N_clone_1[0] != null)
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    Destroy(AvaX_N_clone_1[i]);
-
-                }
-            }
-
-            yyy++;
-            if (zzz == 24 && yyy == 49)
-            {
-                PosRNeg = false;
-            }
-
         }
     }
     void PositiveAndRandomNegativeSamples_48()
@@ -3360,6 +3495,145 @@ public class Experiment : MonoBehaviour, IPointerClickHandler
         //Debug.Log("Total count : " + t_count);
 
         return Ava_Clones;
+    }
+    void HeatMapVis()
+    {
+        for (int y = 0; y < Map_R_height; y++)
+        {
+            for (int x = 0; x < Map_R_width; x++)
+            {
+                if (Map_R[x, y, 0].walkable)
+                {
+                    hIndex = new SimIndex[24];
+                    for (int z = 0; z < 24; z++)
+                    {
+                        hIndex[z] = new SimIndex(x, y, z, sIndex[y * Map_R_width * numSec + x * numSec + z].simValue);
+                    }
+                    var result = hIndex.OrderBy(SimIndex => SimIndex.simValue);
+                    Vector3 pos = new Vector3(Map_R[x, y, 0].xCoord, 0f, Map_R[x, y, 0].zCoord);
+                    Vector3 end = new Vector3(pos.x + 0.2f * Mathf.Cos(Mathf.PI / 180f * (-15f * result.ElementAt(0).sIdx + 90f) % 360), 0f, pos.z + 0.2f * Mathf.Sin(Mathf.PI / 180f * (-15f * result.ElementAt(0).sIdx + 90f) % 360));
+                    Vector3 dir = new Vector3(end.x - pos.x, 0f, end.z - pos.z);
+                    heatSim = result.ElementAt(0).simValue;
+
+                    if (heatSim < highestSim + SimDiff)
+                    {
+                        heatSim = (heatSim - highestSim) / SimDiff;
+                        heatSim = 1 - heatSim;
+                        float p;
+                        Color heatColor;
+                        if (heatSim < 0.05f)
+                        {
+                            p = 20f * heatSim;
+                            heatColor = new Color(0.15f - 0.15f * p, 0.15f - 0.15f * p, 0.85f * p + 0.15f);
+                        }
+                        else if (heatSim > (2.0f / 3.0f))
+                        {
+                            p = 3f * heatSim - 2f;
+                            heatColor = new Color(1.0f * p, 1.0f - p, 0f);
+                        }
+                        else if (heatSim > (1.0f / 3.0f))
+                        {
+                            p = 3f * heatSim - 1f;
+                            heatColor = new Color(p, 1.0f, 0f);
+                        }
+                        else
+                        {
+                            p = 3f * heatSim;
+                            heatColor = new Color(0, (1.0f / 0.85f) * (p - 0.15f), 1.0f - (1.0f / 0.85f) * (p - 0.15f));
+                        }
+                        DebugExtension.DebugArrow(pos, dir, heatColor);
+                    }
+
+
+
+                    /*
+                    if (highestSim <= heatSim && heatSim < highestSim + heatLev)
+                    {
+                        DebugExtension.DebugArrow(pos, dir, Color.red);
+                        //Debug.DrawLine(pos, end, Color.red);
+                    }
+                    if (highestSim + heatLev <= heatSim && heatSim < highestSim + heatLev * 2f)
+                    {
+                        DebugExtension.DebugArrow(pos, dir, Color.magenta);
+                    }
+                    if (highestSim + heatLev * 2f <= heatSim && heatSim < highestSim + heatLev * 3f)
+                    {
+                        DebugExtension.DebugArrow(pos, dir, Color.yellow);
+                    }
+                    if (highestSim + heatLev * 3f <= heatSim && heatSim < highestSim + heatLev * 4f)
+                    {
+                        DebugExtension.DebugArrow(pos, dir, Color.green);
+                    }
+
+                    if (highestSim + heatLev * 4f <= heatSim && heatSim <= highestSim + heatLev * 5f)
+                    {
+                        DebugExtension.DebugArrow(pos, dir, Color.blue);
+                    }
+                    */
+                }
+            }
+        }
+    }
+    void TxtToMat()
+    {
+        string tempFileName;
+        string line;
+        string[] numbers;
+        tempFileName = Application.dataPath + "\\SVsFromMatlab\\MLR_w2.txt";
+        sr = new StreamReader(@tempFileName);
+        Mat_Lab = new float[45, 45];
+
+        line = sr.ReadLine();
+        numbers = line.Split(' ');
+        for (int i = 0; i < 45; i++)
+        {
+            for (int j = 0; j < 45; j++)
+            {
+                Mat_Lab[i, j] = float.Parse(numbers[j + 45 * (i)]);
+                //Debug.Log(Mat_Lab[i, j]);
+            }
+        }
+    }
+    float[,] Mat_multiplication(float[,] Mat_A, float[,] Mat_B)
+    {
+        float[,] Mat_C = new float[Mat_A.GetLength(0), Mat_B.GetLength(1)];
+
+        for (int i = 0; i < Mat_A.GetLength(0); i++)
+        {
+            for (int j = 0; j < Mat_B.GetLength(1); j++)
+            {
+                Mat_C[i, j] = 0;
+
+                for (int k = 0; k < 2; k++)
+                {
+                    Mat_C[i, j] += Mat_A[i, k] * Mat_B[k, j];
+                }
+
+            }
+
+        }
+        return Mat_C;
+    }
+    float MKML_distance(float[] humanX, float[] avatarX, float[,] Mat_W)
+    {
+        float distance = 0f;
+        float[,] feature_difference = new float[1, 45];
+        for (int i = 0; i < 45; i++)
+        {
+            feature_difference[0, i] = humanX[i] - avatarX[i];
+        }
+
+        float[,] Mat_temp = Mat_multiplication(feature_difference, Mat_W);
+        float[,] feature_difference_T = new float[45, 1];
+        for (int i = 0; i < 45; i++)
+        {
+            feature_difference_T[i, 0] = humanX[i] - avatarX[i];
+        }
+        float[,] Mat_result = Mat_multiplication(Mat_temp, feature_difference_T);
+
+        distance = Mat_result[0, 0];
+
+        return distance;
     }
     void DrawRectangle(float X_start, float X_end, float Z_start, float Z_end, Color Square_color)
     {
@@ -8857,86 +9131,7 @@ public class Experiment : MonoBehaviour, IPointerClickHandler
 
 
     }
-    float[] Feat_fromX(GameObject FromX, GameObject ToY, int HumOrAva)
-    {
-
-
-        fromXfeat = FeatureValues(FromX, ToY, fromXfeat);
-
-        //Pose Affordance
-        //Feat41[0]-Feat41[16]
-        feat_fromX[0] = fromXfeat[0]/1000f;
-        for (int i = 0; i < 16; i++)
-        {
-            if (i == 0)
-            {
-                feat_fromX[i+1] = (0.25f * fromXfeat[16] + 0.5f * fromXfeat[i + 1] + 0.25f * fromXfeat[i + 2])/1000f;
-            }
-
-            feat_fromX[i+1] = (0.25f * fromXfeat[i] + 0.5f * fromXfeat[i + 1] + 0.25f * fromXfeat[i + 2])/1000f;
-
-            if (i == 15)
-     
-       {
-                feat_fromX[i+1] = (0.25f * fromXfeat[i] + 0.5f * fromXfeat[i + 1] + 0.25f * fromXfeat[1])/1000f;
-            }
-        }
-
-        //Distance from X to Y
-        //Feat41[17]
-        feat_fromX[17] = fromXfeat[17]/10f;
-
-        //Angle between X front and X to Y
-        //Feat41[18]
-        feat_fromX[18] = Mathf.Min(fromXfeat[18],(360f- fromXfeat[18]))/180f;
-        feat_fromX[19] = Mathf.Min(fromXfeat[19], (360f - fromXfeat[19])) / 180f;
-        //Object category frequency nexr X and X'
-        //Feat41[19]-Feat41[30]
-        float[] object_category_frequency = new float[12];
-        if (HumOrAva ==0)
-        {
-            object_category_frequency = fur_script.Object_category_frequency_HumX(FromX);
-        }
-        else
-        {
-            object_category_frequency = fur_script.Object_category_frequency_AvaX(FromX);
-        }
-
-        for (int i = 0; i < 12; i++)
-        {
-            feat_fromX[i + 20] = object_category_frequency[i];
-        }
-
-        //Visual attention of X as category frequency
-        //Feat41[31]-Feat41[42]
-        float[] visual_attention_category_frequency = new float[12];
-        if (HumOrAva == 0)
-        {
-            visual_attention_category_frequency = fur_script.VisualAttention_Hum(FromX);
-
-        }
-        else
-        {
-            visual_attention_category_frequency = fur_script.VisualAttention_Ava(FromX);
-        }
-
-        for (int i = 0; i < 12; i++)
-        {
-            feat_fromX[i + 32] = visual_attention_category_frequency[i];
-        }
-
-
-        //SitOrStand
-        //Feat41[43]
-        feat_fromX[44] = SitOrStandofX(FromX);
-        
-
-        //skipfornow
-        //Dist_feat[5] = fur_script.Free_space_diff(HumX, AvaX);
-
-
-        return feat_fromX;
-    }
+    
     float[] Feat_fromX_44(GameObject FromX, GameObject ToY, int HumOrAva)
     {
 
@@ -9588,199 +9783,7 @@ public class Experiment : MonoBehaviour, IPointerClickHandler
 
         return Dist_feat;
     }
-    float[] FeatureValues(GameObject FromX, GameObject ToY, float[] basicFeat)
-    {
-        //Debug.Log("FromX : " + FromX);
-        //Debug.Log("ToY : " + ToY);
-
-        //float[]  basicFeat = new float[20];
-
-
-        EulerAngleY = FromX.transform.eulerAngles.y;
-
-        //////////1.Social feature
-        tempVec3 = new Vector3(FromX.transform.position.x - ToY.transform.position.x, 0f, FromX.transform.position.z - ToY.transform.position.z);
-        distToY = Vector3.Magnitude(tempVec3);
- 
-        basicFeat[17] = distToY;
-
-        angleXwrtY = ContAngle(FromX.transform.forward, ToY.transform.position - FromX.transform.position);
-        /*
-        if(angleXwrtY>180)
-        {
-            angleXwrtY = 360 - angleXwrtY;
-        }
-        */
-
-        //Debug.Log("Angle between the forward direction of X and the position of Y : " + angleXwrtY);
-        basicFeat[18] = angleXwrtY;
-
-        angleYwrtX = ContAngle(ToY.transform.forward, FromX.transform.position - ToY.transform.position);
-
-        /*
-        if (angleYwrtX > 180)
-        {
-            angleYwrtX = 360 - angleYwrtX;
-        }
-        */
-        //Debug.Log("Angle between the forward direction of X and the position of Y : " + angleXwrtY);
-        basicFeat[19] = angleYwrtX;
-
-
-
-        //////////2.Affordance
-        RaycastHit hit;
-
-        //Debug.Log("Circular height field----------------------------------------------------------------");
-        for (int l = 0; l < 2; l++)
-        {
-            if(l==0)
-            { 
-                totHeight = 0.0f;
-                for (int m = 0; m < numSampling/10f; m++)
-                {
-                    randsqrt = Mathf.Sqrt(Random.Range(0.0f, 1.0f));
-                    ray_start.Set(FromX.transform.position.x + 0.25f * (l + randsqrt) * Mathf.Cos(Mathf.PI / 180f * Random.Range(0, 360f)), 2.25f, FromX.transform.position.z + 0.25f * (l + randsqrt) * Mathf.Sin(Mathf.PI / 180f * Random.Range(0, 360f)));
-                    if (Physics.Raycast(ray_start, ray_dir_down, out hit, 2f))
-                    {
-                        totHeight = totHeight + hit.point.y;
-                        //Debug.DrawLine(ray_start, hit.point, Color.blue);
-                    }
-                }
-                basicFeat[0] = totHeight*10f;
-                //Debug.Log ("Feat[" + 0 + "] : " + Feat [0]);
-            }
-            else
-            { 
-                for (int k = 1; k < 17; k++)
-                {
-                    totHeight = 0.0f;
-                    for (int m = 0; m < numSampling/10f; m++)
-                    {
-                        randsqrt = Mathf.Sqrt(Random.Range(0.0f, 1.0f));
-                        ray_start.Set(FromX.transform.position.x + 0.25f * (l + randsqrt) * Mathf.Cos(Mathf.PI / 180f * Random.Range((22.5F * k - EulerAngleY + 90f) % 360f, (22.5F * (k+1) - EulerAngleY + 90f) % 360f)), 2.25f, FromX.transform.position.z + 0.25f * (l + randsqrt) * Mathf.Sin(Mathf.PI / 180f * Random.Range((22.5F * k - EulerAngleY + 90f) % 360f, (22.5F * (k+1) - EulerAngleY + 90f) % 360f)));
-                        if (Physics.Raycast(ray_start, ray_dir_down, out hit, 2f))
-                        {
-                            totHeight = totHeight + hit.point.y;
-                            //Debug.DrawLine(ray_start, hit.point, Color.blue);
-                        }
-                    }
-                    //totHeight = totHeight / numSampling  ;
-                    //Debug.Log("numSec: "+ k +" level: " + l + " Height: " +	  totHeight);
-                    //circCount =  k + numSec * l;
-                    basicFeat[k] = totHeight*10f;
-                    //Debug.Log ("Feat[" + k + "] : " + Feat [k]);
-                }
-            }
-        }
-
-
-
-
-
-
-
-        //Debug.Log("Feat[25]" + Feat[25]);
-        
-
-        /*
-        //////////3.Space feature
-        //Debug.Log("AvatarX Space feature count "+count);
-        for (int l = 0; l < 1; l++) // l<L_space
-        {
-            for (int k = 0; k < 3; k++) // k < numSec
-            {
-                float bin1, bin2, bin3, bin4, bin5, bin6, bin7;
-                totHeight = 0.0f;
-                bin1 = 0; bin2 = 0; bin3 = 0; bin4 = 0; bin5 = 0; bin6 = 0; bin7 = 0;
-                for (int m = 0; m < numSampling; m++)
-                {
-                    randsqrt = Mathf.Sqrt(Random.Range(0.0f, 1.0f));
-                    ray_start.Set(FromX.transform.position.x + 0.50f * (l + randsqrt) * Mathf.Cos(Mathf.PI / 180f * Random.Range((15.0F * k - EulerAngleY + 90f) % 360f, (15.0F * (k+1) - EulerAngleY + 90f) % 360f)), 2.25f, FromX.transform.position.z + 0.50f * (l + randsqrt) * Mathf.Sin(Mathf.PI / 180f * Random.Range((15.0F * k - EulerAngleY + 90f) % 360f, (15.0F * (k+1) - EulerAngleY + 90f) % 360f)));
-                    if (Physics.Raycast(ray_start, ray_dir_down, out hit, 2f))
-                    {
-                        if (hit.point.y <= 0.5f)
-                        {
-                            bin2 = bin2 + 1;
-                        }
-                        if (hit.point.y > 0.5f && hit.point.y <= 1.0f)
-                        {
-                            bin3 = bin3 + 1;
-                        }
-                        if (hit.point.y > 1.0f && hit.point.y <= 1.5f)
-                        {
-                            bin4 = bin4 + 1;
-                        }
-                        if (hit.point.y > 1.5f && hit.point.y <= 2.0f)
-                        {
-                            bin5 = bin5 + 1;
-                        }
-                        if (hit.point.y > 2.0f && hit.point.y <= 2.5f)
-                        {
-                            bin6 = bin6 + 1;
-                        }
-                        if (hit.point.y > 2.5f && hit.point.y <= 3.0f)
-                        {
-                            bin7 = bin7 + 1;
-                        }
-                    }
-                    else
-                    {
-                        bin1 = bin1 + 1;
-                    }
-                }
-                // 2(soc) + 24(Aff) + 4(level) * 24(sector) * 7(bin) 
-                Feat[l * numSec * numBin + k * numBin + 0] = bin1 / numSampling;
-                Feat[l * numSec * numBin + k * numBin + 1] = bin2 / numSampling;
-                Feat[l * numSec * numBin + k * numBin + 2] = bin3 / numSampling;
-                Feat[l * numSec * numBin + k * numBin + 3] = bin4 / numSampling;
-                Feat[l * numSec * numBin + k * numBin + 4] = bin5 / numSampling;
-                Feat[l * numSec * numBin + k * numBin + 5] = bin6 / numSampling;
-                Feat[l * numSec * numBin + k * numBin + 6] = bin7 / numSampling;
-
-                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 0) + "][level : " + l + ", sector : " +  k + "].bin1 : " + Feat[l * numSec * numBin + k * numBin + 0]);
-                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 1) + "][level : " + l + ", sector : " +  k + "].bin2 : " + Feat[l * numSec * numBin + k * numBin + 1]);
-                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 2) + "][level : " + l + ", sector : " + k + "].bin3 : " + Feat[l * numSec * numBin + k * numBin + 2]);
-                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 3) + "][level : " + l + ", sector : " + k + "].bin4 : " + Feat[l * numSec * numBin + k * numBin + 3]);
-                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 4) + "][level : " + l + ", sector : " + k + "].bin5 : " + Feat[l * numSec * numBin + k * numBin + 4]);
-                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 5) + "][level : " + l + ", sector : " + k + "].bin6 : " + Feat[l * numSec * numBin + k * numBin + 5]);
-                Debug.Log("SFeat[" + (l * numSec * numBin + k * numBin + 6) + "][level : " + l + ", sector : " + k + "].bin7 : " + Feat[l * numSec * numBin + k * numBin + 6]);
-                Debug.Log("-------------------");
-
-            }
-        }
-        */
-        //Debug.Log("----------------------------------------------------------------------------------------------------------------------------");
-        /*////////////4. Isovist
-        Debug.Log("Isovist----------------------------------------------------------------");
-        int isoCount = socFeatureSize + affordFeatureSize + spatialFeatureSize;
-        for (int k = 1; k < 14; k++) {
-
-            ray_start.Set (FromX.transform.position.x, 0.5f, FromX.transform.position.z);
-            ray_iso.Set (Mathf.Cos (Mathf.PI / 180f * ((15.0F * (k - 1)-EulerAngleY)%360)), 0, Mathf.Sin (Mathf.PI / 180f * ((15.0F * (k - 1)-EulerAngleY)%360)));
-          
-            //Debug.Log(isoCount);
-            //Debug.Log(k);
-            if (Physics.Raycast (ray_start, ray_iso, out hit, 4f)) {
-                Debug.DrawLine (ray_start, hit.point, Color.cyan);
-                float Dist_Isovist = Vector3.Distance (ray_start, hit.point);
-                //Dist_Isovist = Dist_Isovist / 5f / 13f;
-                //Debug.Log ("Isovist(" + k + ") : " + Dist_Isovist);
-                Feat [isoCount] = Dist_Isovist;
-                //Debug.Log ("[" + isoCount + "] : " + Feat [isoCount]);
-            } 
-            else { 
-                float iso_nothit = 4f;
-                //Debug.Log("Isovist(" + k + ") : " + iso_nothit);
-                Feat [isoCount] = iso_nothit;
-                //Debug.Log ("[" + isoCount + "] : " + Feat [isoCount]);
-            }
-            isoCount = isoCount + 1;
-        }
-        */
-        return basicFeat;
-
-    }
+    
     float SitOrStand(GameObject HumX, GameObject AvaX)
     {
         RaycastHit hit;

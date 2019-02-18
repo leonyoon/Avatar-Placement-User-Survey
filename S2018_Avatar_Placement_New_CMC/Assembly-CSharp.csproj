@@ -10,7 +10,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>
     </RootNamespace>
-    <ProjectGuid>{33A3CD10-3FC6-7B46-54C9-03107F81E45C}</ProjectGuid>
+    <ProjectGuid>{3A0F79F6-1703-EC27-F033-2C7428D76B7A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -7525,16 +7525,16 @@
     <None Include="Assets\Metric\svm_feature\andor\svm_t_20_28d.txt" />
     <None Include="Assets\Metric\svm_feature\04015\svm_t_12_28c.txt" />
     <Reference Include="UnityEditor.StandardEvents">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -7735,16 +7735,16 @@
       <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Assets/MORPH3D/Scripts/Plugins/ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Assets/MORPH3D/Scripts/Plugins/ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="M3DIMPORT_DLL">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Assets/MORPH3D/Scripts/Plugins/M3DIMPORT_DLL.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Assets/MORPH3D/Scripts/Plugins/M3DIMPORT_DLL.dll</HintPath>
     </Reference>
     <Reference Include="M3D_DLL">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Assets/MORPH3D/Scripts/Plugins/M3D_DLL.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Assets/MORPH3D/Scripts/Plugins/M3D_DLL.dll</HintPath>
     </Reference>
     <Reference Include="MCS_Utilities">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Assets/MORPH3D/Scripts/Plugins/MCS_Utilities.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Assets/MORPH3D/Scripts/Plugins/MCS_Utilities.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Analytics">
       <HintPath>C:/Users/lyoon/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.16/UnityEngine.Analytics.dll</HintPath>

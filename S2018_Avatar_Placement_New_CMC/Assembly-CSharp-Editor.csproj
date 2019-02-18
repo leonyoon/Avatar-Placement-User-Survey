@@ -10,7 +10,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>
     </RootNamespace>
-    <ProjectGuid>{516A3D22-27B6-E094-FDA5-025D8C3BA75A}</ProjectGuid>
+    <ProjectGuid>{87CEDC5E-D2C5-1D0E-B9BB-DE1CDDD8DF09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -91,19 +91,19 @@
     <Compile Include="Assets\MORPH3D\Vendor\Unity\Shaders\Skin\Editor\VolundMultiStandardShaderGUI.cs" />
     <Compile Include="Assets\Pathfinding\Editor\WaypointEditor.cs" />
     <Reference Include="Assembly-UnityScript">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.StandardEvents">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -349,16 +349,16 @@
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Assets/MORPH3D/Scripts/Plugins/ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Assets/MORPH3D/Scripts/Plugins/ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="M3DIMPORT_DLL">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Assets/MORPH3D/Scripts/Plugins/M3DIMPORT_DLL.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Assets/MORPH3D/Scripts/Plugins/M3DIMPORT_DLL.dll</HintPath>
     </Reference>
     <Reference Include="M3D_DLL">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Assets/MORPH3D/Scripts/Plugins/M3D_DLL.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Assets/MORPH3D/Scripts/Plugins/M3D_DLL.dll</HintPath>
     </Reference>
     <Reference Include="MCS_Utilities">
-      <HintPath>D:/Unity_Projects/Unity_project_TOG2018/S2018_Avatar_Placement_Figure_Arrow_Deep_MKML_CMC/Assets/MORPH3D/Scripts/Plugins/MCS_Utilities.dll</HintPath>
+      <HintPath>G:/Github/Avatar-Placement-User-Survey/S2018_Avatar_Placement_New_CMC/Assets/MORPH3D/Scripts/Plugins/MCS_Utilities.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>C:/Users/lyoon/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
@@ -405,7 +405,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{33A3CD10-3FC6-7B46-54C9-03107F81E45C}</Project>
+      <Project>{3A0F79F6-1703-EC27-F033-2C7428D76B7A}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
   </ItemGroup>
