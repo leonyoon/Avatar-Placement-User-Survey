@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/All_pairs.unity
-  isLoaded: 1
-  isActive: 1
