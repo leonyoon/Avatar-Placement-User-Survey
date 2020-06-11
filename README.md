@@ -1,2 +1,43 @@
 # Avatar Placement User Survey Result
-Coming soon
+
+
+/screenshot/
+-24 space pairs
+-36 questions / house pair
+
+~/Houses/ : images of 8 houses
+
+~/PairOfHouses/ : images of 24 house pairs
+
+~/UserPlacements/Pair#/P#S% /: images of user placed avatars (# - pair number and % - scene number)
+
+
+/data/
+-45d feature vectors
+-feature_x_#.txt (# - pair number)
+
+~/x/ : Feature vector of person X
+
+1 feature vector from the placement of person X, repeated 110 times (rows) for each question (1 placement x 110 repeats x 36 questions = 3960 rows) to match 110 negative random samples.
+
+~/pos/ : Feature vector of avatar X' (10 answers for each question) placed by participants
+
+10 feature vectors from the answers repeated 11 times (10 answers x 11 repeats x 36 questions = 3960 rows).
+
+~/neg/ : Feature vector of avatar X' (110 samples for each question) for negative random samples
+110 feature vectors for each question (110 samples x 36 questions = 3960 rows)
+
+
+
+
+
+
+For house pair 1,
+
+Feature vector of person X from each of 36 questions 
+data/x/feature_x_1.txt
+110 repeated
+
+3960 (raws) X 45 (columns)
+
+
