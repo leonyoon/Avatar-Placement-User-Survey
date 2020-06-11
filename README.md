@@ -1,7 +1,7 @@
 # Avatar Placement User Survey Result
 
 screenshot
-- 24 space pairs
+- 24 house pairs
 - 36 questions per house pair
 
 ~/Houses/ : images of 8 houses
