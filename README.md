@@ -1,7 +1,7 @@
 # Avatar Placement User Survey Result
 
 
-/screenshot/
+screenshot
 - 24 space pairs
 - 36 questions per house pair
 
@@ -13,7 +13,7 @@
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 
-/data/
+data
 - 45d feature vectors
 - feature_x_#.txt (# - pair number)
 
