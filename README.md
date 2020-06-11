@@ -17,16 +17,11 @@
 - 45d feature vectors
 - feature_x_#.txt (# - pair number)
 
-~/x/ : Feature vector of person X
+~/x/ : 1 feature vector from the placement of person X, repeated 110 times (rows) for each question (1 placement x 110 repeats x 36 questions = 3960 rows) to match 110 negative random samples.
 
-1 feature vector from the placement of person X, repeated 110 times (rows) for each question (1 placement x 110 repeats x 36 questions = 3960 rows) to match 110 negative random samples.
+~/pos/ : 10 feature vectors of Avatar X' placed by participants for each question repeated 11 times (10 answers x 11 repeats x 36 questions = 3960 rows).
 
-~/pos/ : Feature vector of avatar X' (10 answers for each question) placed by participants
-
-10 feature vectors from the answers repeated 11 times (10 answers x 11 repeats x 36 questions = 3960 rows).
-
-~/neg/ : Feature vector of avatar X' (110 samples for each question) for negative random samples
-110 feature vectors for each question (110 samples x 36 questions = 3960 rows)
+~/neg/ : 110 feature vectors of randomly placed Avatar X' for each question (110 samples x 36 questions = 3960 rows).
 
 
 
