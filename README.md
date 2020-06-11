@@ -2,8 +2,8 @@
 
 
 /screenshot/
--24 space pairs
--36 questions / house pair
+- 24 space pairs
+- 36 questions per house pair
 
 ~/Houses/ : images of 8 houses
 
@@ -11,10 +11,11 @@
 
 ~/UserPlacements/Pair#/P#S% /: images of user placed avatars (# - pair number and % - scene number)
 
+---------------------------------------------------------------------------------------------------------------------------------------
 
 /data/
--45d feature vectors
--feature_x_#.txt (# - pair number)
+- 45d feature vectors
+- feature_x_#.txt (# - pair number)
 
 ~/x/ : Feature vector of person X
 
