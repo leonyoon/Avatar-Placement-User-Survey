@@ -1,6 +1,5 @@
 # Avatar Placement User Survey Result
 
-
 screenshot
 - 24 space pairs
 - 36 questions per house pair
@@ -22,18 +21,4 @@ data
 ~/pos/ : 10 feature vectors of Avatar X' placed by participants for each question repeated 11 times (10 answers x 11 repeats x 36 questions = 3960 rows).
 
 ~/neg/ : 110 feature vectors of randomly placed Avatar X' for each question (110 samples x 36 questions = 3960 rows).
-
-
-
-
-
-
-For house pair 1,
-
-Feature vector of person X from each of 36 questions 
-data/x/feature_x_1.txt
-110 repeated
-
-3960 (raws) X 45 (columns)
-
 
