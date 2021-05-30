@@ -1,16 +1,16 @@
-# Avatar Placement User Survey Result
+Placement Retargeting of Virtual Avatars to Dissimilar Indoor Environments
 
 Project Page
 ---------------------------------------------------------------------------------------------------------------------------------------
 http://motionlab.kaist.ac.kr/?page_id=6060
 
 
-Visualizer Desktop App For Windows
+Data Visualizer Application For Windows
 ---------------------------------------------------------------------------------------------------------------------------------------
 https://drive.google.com/file/d/13PcQHmVxsHDgv_bbqmzMKffixaZOvAJL/view?usp=sharing
 
 
-screenshot
+Screenshots of user survey results
 ---------------------------------------------------------------------------------------------------------------------------------------
 - 24 house pairs
 - 36 questions per house pair
