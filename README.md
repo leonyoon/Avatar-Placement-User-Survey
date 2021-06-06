@@ -12,7 +12,7 @@ Placement Retargeting of Virtual Avatars to Dissimilar Indoor Environments
 > Video(demo): https://www.youtube.com/watch?v=wwsWBeflVcU<br>
 
 
-Data Visualizer Application For Windows
+Data Visualization Application For Windows
 ---------------------------------------------------------------------------------------------------------------------------------------
 https://drive.google.com/file/d/13PcQHmVxsHDgv_bbqmzMKffixaZOvAJL/view?usp=sharing
 
