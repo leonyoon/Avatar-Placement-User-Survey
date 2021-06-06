@@ -12,11 +12,14 @@ Placement Retargeting of Virtual Avatars to Dissimilar Indoor Environments
 > Video(demo): https://www.youtube.com/watch?v=wwsWBeflVcU<br>
 
 
+
 Data Visualization Application For Windows
 ---------------------------------------------------------------------------------------------------------------------------------------
 https://drive.google.com/file/d/13PcQHmVxsHDgv_bbqmzMKffixaZOvAJL/view?usp=sharing
 
 <p align="center"><img src="Visualizer_small.png" align="center" style="width: 25%; height: 25%"/> <br></p>
+
+
 
 screenshot of user survey results
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -28,6 +31,7 @@ screenshot of user survey results
 ~/PairOfHouses/ : images of 24 house pairs
 
 ~/UserPlacements/Pair#/P#S% /: images of user placed avatars (# - pair number and % - scene number)
+
 
 
 data
