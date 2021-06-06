@@ -1,9 +1,15 @@
 Placement Retargeting of Virtual Avatars to Dissimilar Indoor Environments
 ---------------------------------------------------------------------------------------------------------------------------------------
 
-Project Page
----------------------------------------------------------------------------------------------------------------------------------------
-http://motionlab.kaist.ac.kr/?page_id=6060
+<p align="center"><img src="images/random_sampling.gif" align="center"> <br></p>
+
+> **Placement Retargeting of Virtual Avatars to Dissimilar Indoor Environments**<br>
+
+> IEEE TVCG, presented in IEEE ISMAR 2020<br>
+> Paper: https://arxiv.org/abs/2012.11878<br>
+> Project: http://motionlab.kaist.ac.kr/?page_id=6060<br>
+> Video(method): https://www.youtube.com/watch?v=QIZJvcvW1qg&t=2s<br>
+> Video(demo): https://www.youtube.com/watch?v=wwsWBeflVcU<br>
 
 
 Data Visualizer Application For Windows
@@ -11,7 +17,7 @@ Data Visualizer Application For Windows
 https://drive.google.com/file/d/13PcQHmVxsHDgv_bbqmzMKffixaZOvAJL/view?usp=sharing
 
 
-Screenshots of user survey results
+screenshot of user survey results
 ---------------------------------------------------------------------------------------------------------------------------------------
 - 24 house pairs
 - 36 questions per house pair
