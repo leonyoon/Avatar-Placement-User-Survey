@@ -1,7 +1,7 @@
 Placement Retargeting of Virtual Avatars to Dissimilar Indoor Environments
 ---------------------------------------------------------------------------------------------------------------------------------------
 
-<p align="center"><img src="images/random_sampling.gif" align="center"> <br></p>
+<p align="center"><img src="TVCG_thumbnail.png" align="center"> <br></p>
 
 > **Placement Retargeting of Virtual Avatars to Dissimilar Indoor Environments**<br>
 
