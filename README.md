@@ -10,6 +10,7 @@ Placement Retargeting of Virtual Avatars to Dissimilar Indoor Environments
 > Project: http://motionlab.kaist.ac.kr/?page_id=6060<br>
 > Video(method): https://www.youtube.com/watch?v=QIZJvcvW1qg&t=2s<br>
 > Video(demo): https://www.youtube.com/watch?v=wwsWBeflVcU<br>
+
 <br><br>
 
 
