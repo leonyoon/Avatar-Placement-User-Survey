@@ -18,7 +18,7 @@ Data Visualization Application For Windows
 ---------------------------------------------------------------------------------------------------------------------------------------
 https://drive.google.com/file/d/13PcQHmVxsHDgv_bbqmzMKffixaZOvAJL/view?usp=sharing
 
-<p align="center"><img src="Visualizer_small.png" align="center" style="width: 25%; height: 25%"/> <br></p>
+<p align="center"><img src="Visualizer_small1.png" align="center" style="width: 25%; height: 25%"/> <br></p>
 <br><br>
 
 screenshot of user survey results
